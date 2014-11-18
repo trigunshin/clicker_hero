@@ -14,7 +14,15 @@
 <link rel="stylesheet" href="/static/bootstrap/2.2.2/css/bootstrap-responsive.min.css">
 </head>
 <body>
-
+    <!--
+    $('#flash_container').css("left","-2000px");
+    $('#flash_container').css("left","0px");
+    or
+    $('#flash_container').animate({ left: "-2000px"},1000);
+    $('#flash_container').animate({ left: "0"},1000);
+-->
+<div id="flash_div_container" style="width:640px; height:480px; overflow:hidden;">
+<div id="flash_container" style="width:640px; height:480px; position:relative; left:0px; top:0px;">
     <span id="flashContent">
         <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="640" height="480" id="https://d1snsxh2hr65cz.cloudfront.net/ClickerHeroes_v2312.swf" align="middle">
             <param name="movie" value="https://d1snsxh2hr65cz.cloudfront.net/ClickerHeroes_v2312.swf" />
@@ -50,7 +58,8 @@
             <!--<![endif]-->
         </object>
     </span>
-
+</div>
+</div>
 
 </body>
 </html>
