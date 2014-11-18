@@ -76,6 +76,8 @@
             </span>
         </div>
     </div>
+    <div id="output">
+    </div>
 </script>
 <script id="calc_area_template" type="text/template" class="template">
     <textarea id="savedata" onfocus="this.select()" onmouseup="return false"></textarea>
@@ -111,7 +113,9 @@
         Relevant gild level (for Argaiv): <input type="text" id="gildlevel" value="0" style="width: 100px"></input>
     </div>
     <div>
+        <input type="button" value="Update" onclick="Compute()"></input>
         Leave current level blank or 0 if you don't own the ancient.
+        <label><input type="checkbox" id="suggestbuy" checked="checked"></input>Suggest additional ancients to purchase (can be slow if the number of souls is very high)</label>
         <table id="herotbl" border="0" cellspacing="0">
             <tr><th>Ancient</th><th>Current</th><th>Target</th></tr>
             <tr>
@@ -120,10 +124,6 @@
                 <td><input type="text" id="soulsout" readonly="readonly" tabindex="-1"></input></td>
             </tr>
         </table>
-        <input type="button" value="Update" onclick="Compute()"></input>
-        <label><input type="checkbox" id="suggestbuy" checked="checked"></input>Suggest additional ancients to purchase (can be slow if the number of souls is very high)</label>
-    </div>
-    <div id="output">
     </div>
 </script>
 <script src="static/js/init.js"></script>
