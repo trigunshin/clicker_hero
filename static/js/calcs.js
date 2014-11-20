@@ -529,12 +529,12 @@ function Compute() {
       }
     }
   }
-  var outLog = "";
-  outLog += "Efficiency multiplier: " + outFactor.toExponential(3).replace("+", "") + "<br/>\n";
-  outLog += "Improvement over current: " + FormatFactor(outFactor / initFactor) + "<br/>\n";
+  var outLog = "<ul>";
+  outLog += "<li>Efficiency multiplier: " + outFactor.toExponential(3).replace("+", "") + "<br/>\n</li>";
+  outLog += "<li>Improvement over current: " + FormatFactor(outFactor / initFactor) + "<br/>\n</li>";
   if (AbaddonMultiplier) {
-    outLog += "Without current Dark Ritual stacks: " + FormatFactor(outFactor / initFactor / AbaddonMultiplier) +
-      " (current DR multiplier is " + AbaddonMultiplier.toFixed(3) + ", ~" + Math.round(Math.log(AbaddonMultiplier) / Math.log(1.1)) + " uses)<br/>\n";
+    outLog += "<li>Without current Dark Ritual stacks: " + FormatFactor(outFactor / initFactor / AbaddonMultiplier) +
+      " (current DR multiplier is " + AbaddonMultiplier.toFixed(3) + ", ~" + Math.round(Math.log(AbaddonMultiplier) / Math.log(1.1)) + " uses)<br/>\n</li>";
   }
   var effAncients = [];
   if ($("#suggestbuy").prop("checked")) {
@@ -551,10 +551,11 @@ function Compute() {
   effAncients.sort(function(a, b) {return b.factor - a.factor;});
   for (var i = 0; i < effAncients.length; i++) {
     var ancient = Ancients[effAncients[i].ancient];
-    outLog += "<a href=\"javascript:void(0)\" class=\"buybtn\" aid=\"" + effAncients[i].ancient + "\" title=\"" + ancient.desc + "\">Purchase " + ancient.name + "</a>: " +
+    outLog += "<li><a href=\"javascript:void(0)\" class=\"buybtn\" aid=\"" + effAncients[i].ancient + "\" title=\"" + ancient.desc + "\">Purchase " + ancient.name + "</a>: " +
               ancient.price + " souls, " + effAncients[i].factor.toExponential(3).replace("+", "") + " efficiency (" + FormatFactor(effAncients[i].factor / outFactor) +
-              " improvement).<br/>\n";
+              " improvement).<br/>\n</li>";
   }
+  outLog += "</ul>";
   $("#output").html(outLog);
   $(".buybtn").click(function() {
     var aid = $(this).attr("aid");
