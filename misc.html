@@ -127,17 +127,25 @@
             <label>Relevant gild level (for Argaiv): <input type="text" id="gildlevel" value="0" style="width: 100px"></input></label>
         </div>
     </div>
-    <div>
-        <input type="button" value="Update" onclick="Compute()"></input>
-        <label><input type="checkbox" id="suggestbuy" checked="checked"></input>Suggest additional ancients to purchase (can be slow if the number of souls is very high)</label>
-        <table id="herotbl" border="0" cellspacing="0">
-            <tr><th>Ancient</th><th>Current</th><th>Target</th></tr>
-            <tr>
-                <td>Hero Souls</td>
-                <td><input type="text" id="soulsin" value="0"></input></td>
-                <td><input type="text" id="soulsout" readonly="readonly" tabindex="-1"></input></td>
-            </tr>
-        </table>
+    <div class='row'>
+        <div class='span1'>
+            <input type="button" value="Update" onclick="Compute()"></input>
+        </div>
+        <div class='span2'>
+            <label><input type="checkbox" id="suggestbuy" checked="checked"></input>Suggest ancients</label>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='span6'>
+            <table id="herotbl" border="0" cellspacing="0">
+                <tr><th>Ancient</th><th>Current</th><th>Target</th></tr>
+                <tr>
+                    <td>Hero Souls</td>
+                    <td><input type="text" id="soulsin" value="0"></input></td>
+                    <td><input type="text" id="soulsout" readonly="readonly" tabindex="-1"></input></td>
+                </tr>
+            </table>
+        </div>
     </div>
 </script>
 <script src="static/js/init.js"></script>
