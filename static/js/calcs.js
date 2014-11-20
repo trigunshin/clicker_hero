@@ -555,6 +555,7 @@ function Compute() {
               ancient.price + " souls, " + effAncients[i].factor.toExponential(3).replace("+", "") + " efficiency (" + FormatFactor(effAncients[i].factor / outFactor) +
               " improvement).<br/>\n</li>";
   }
+  outLog += "<li>"+outFactor+"</li>";
   outLog += "</ul>";
   $("#output").html(outLog);
   $(".buybtn").click(function() {

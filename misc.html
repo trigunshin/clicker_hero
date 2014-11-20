@@ -24,7 +24,7 @@
         <div id='calc_template_anchor'></div>
     </div>
     <!-- game area -->
-    <div id='game_template_section' class=''>
+    <div id='game_template_section' class='span6'>
         <div id='game_template_anchor'></div>
     </div>
 </div>
@@ -77,6 +77,16 @@
         </div>
     </div>
     <div class='row'>
+        <div id='boss_calc' class='span3'>
+            <label>Boss Health @lvl:<input type="text" id="boss_level" value="0" style="width: 100px"></input></label>
+        </div>
+        <div class='span1'>
+            <button id='boss_health_button' class='btn'>Calculate</button>
+        </div class='span2'>
+            <div id='boss_health_result' class='span2'>
+        </div>
+    </div>
+    <div class='row'>
         <div id="output" class='span6'>
         </div>
     </div>
@@ -118,9 +128,6 @@
                 </table>
             </div>
         </div>
-        <div class='span3'>
-            <label><input type="checkbox" id="addsouls" checked="checked"></input>Include souls gained after ascension</label>
-        </div>
     </div>
     <div class='row'>
         <div class='span3'>
@@ -131,8 +138,11 @@
         <div class='span1'>
             <input type="button" value="Update" onclick="Compute()"></input>
         </div>
-        <div class='span2'>
+        <div class='span1'>
             <label><input type="checkbox" id="suggestbuy" checked="checked"></input>Suggest ancients</label>
+        </div>
+        <div class='span2'>
+            <label><input type="checkbox" id="addsouls" checked="checked"></input>Include souls gained after ascension</label>
         </div>
     </div>
     <div class='row'>
