@@ -497,6 +497,10 @@ function StartCompute() {
   curSouls = souls;
   curActivity = activity;
   curUsed = used;
-  computeThread.postMessage({cmd: "Compute", levels: levels, souls: souls, gilded: GildedHeroes, activity: activity,
+
+  var ancient_levels = jQuery.extend({}, levels);
+  ancient_levels.iris = 0;
+  ancient_levels.khrysos = 0
+  computeThread.postMessage({cmd: "Compute", levels: ancient_levels, souls: souls, gilded: GildedHeroes, activity: activity,
     damageFactor: AchievementMultiplier, used: used});
 }
