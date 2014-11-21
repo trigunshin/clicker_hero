@@ -1,5 +1,6 @@
-var AbaddonMultiplier = null;
 
+// initialization
+var AbaddonMultiplier = null;
 var GildedHeroes = [0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0,
@@ -97,6 +98,43 @@ var AchievementMultiplier = 1;
 var ToPurchase = [1,2,4,8,16,35,70,125,250,500,800,1200,1700,2200,2750,3400,4100,5000,6000,7500,10000,12500,16000,25000,35000,50000,70000,100000,150000,250000,400000];
 var Seed = null;
 var OwnedNotInList = 1;
+
+var ancientList = [];
+for (var k in Ancients) {
+  if (Ancients.hasOwnProperty(k)) {
+    ancientList.push(k);
+  }
+}
+ancientList.sort();
+
+for (var i = 0; i < ancientList.length; i++) {
+  var key = ancientList[i];
+  var tr = $("<tr></tr>");
+  Ancients[key].used = $("<input></input>").attr("type", "checkbox").attr("title", "Optimize this ancient");
+  if (key != "khrysos" && key != "iris") {
+    Ancients[key].used.prop("checked", true);
+  }
+  tr.append($("<td></td>").append(Ancients[key].used).append($("<span></span>").text(Ancients[key].name).attr("title", Ancients[key].desc)));
+  Ancients[key].level = $("<input></input>").attr("type", "text").val(0);
+  Ancients[key].target = $("<input></input>").attr("type", "text").attr("readonly", "readonly").attr("tabindex", "-1");
+  Ancients[key].targetBox = $("<td></td>").append(Ancients[key].target);
+  tr.append($("<td></td>").append(Ancients[key].level)).append(Ancients[key].targetBox);
+  $("#herotbl").append(tr);
+}
+
+var ANTI_CHEAT_CODE = "Fe12NAfA3R6z4k0z";
+var SALT = "af0ik392jrmt0nsfdghy0";
+
+var curAddAncients = null;
+var curLevels = null;
+var curUsed = null;
+var curSouls = null;
+var curActivity = null;
+var curOutFactor = null;
+var computeThread = null;
+
+// functions
+
 function Random(a, b) {
   Seed = (Seed * 16807) % 2147483647;
   return (Seed % (b - a)) + a;
@@ -180,47 +218,31 @@ function UpdateAncientPrices(levels, didGetVaagur) {
   }
 }
 
-var ancientList = [];
-for (var k in Ancients) {
-  if (Ancients.hasOwnProperty(k)) {
-    ancientList.push(k);
-  }
-}
-ancientList.sort();
-
-for (var i = 0; i < ancientList.length; i++) {
-  var key = ancientList[i];
-  var tr = $("<tr></tr>");
-  Ancients[key].used = $("<input></input>").attr("type", "checkbox").attr("title", "Optimize this ancient");
-  if (key != "khrysos" && key != "iris") {
-    Ancients[key].used.prop("checked", true);
-  }
-  tr.append($("<td></td>").append(Ancients[key].used).append($("<span></span>").text(Ancients[key].name).attr("title", Ancients[key].desc)));
-  Ancients[key].level = $("<input></input>").attr("type", "text").val(0);
-  Ancients[key].target = $("<input></input>").attr("type", "text").attr("readonly", "readonly").attr("tabindex", "-1");
-  Ancients[key].targetBox = $("<td></td>").append(Ancients[key].target);
-  tr.append($("<td></td>").append(Ancients[key].level)).append(Ancients[key].targetBox);
-  $("#herotbl").append(tr);
-}
-
-const ANTI_CHEAT_CODE = "Fe12NAfA3R6z4k0z";
-const SALT = "af0ik392jrmt0nsfdghy0";
-function Import() {
-  var txt = $("#savedata").val();
-  if (txt.search(ANTI_CHEAT_CODE) != -1) {
-    var result = txt.split(ANTI_CHEAT_CODE);
-    txt = "";
+// Given a jquery selector, parse out the text string and return the data
+var get_save_data = function(save_data_selector) {
+  var save_txt = $(save_data_selector).val();
+  if (save_txt.search(ANTI_CHEAT_CODE) != -1) {
+    var result = save_txt.split(ANTI_CHEAT_CODE);
+    save_txt = "";
     for (var i = 0; i < result[0].length; i += 2) {
-      txt += result[0][i];
+      save_txt += result[0][i];
     }
-    if (CryptoJS.MD5(txt + SALT) != result[1]) {
+    if (CryptoJS.MD5(save_txt + SALT) != result[1]) {
       alert("Bad hash");
-      return;
+      return false;
     }
   }
-  var data = $.parseJSON(atob(txt));
+  return $.parseJSON(atob(save_txt));
+}
 
-  var heroes = data.heroCollection.heroes;
+var ImportClick = function() {
+  var data = get_save_data("#savedata");
+  if(!data) return;
+  Import(data);
+};
+
+function Import(save_data) {
+  var heroes = save_data.heroCollection.heroes;
   var ascSouls = 0;
   for (var k = 0; k < GildedHeroes.length; k++) {
     GildedHeroes[k] = 0;
@@ -231,11 +253,11 @@ function Import() {
     if (id < 2 || id > 26) continue;
     GildedHeroes[id - 2] = heroes[k].epicLevel;
   }
-  ascSouls = Math.floor(ascSouls / 2000) + data.primalSouls;
+  ascSouls = Math.floor(ascSouls / 2000) + save_data.primalSouls;
 
   var mult = 1;
-  for (var k in data.achievements) {
-    if (data.achievements[k]) {
+  for (var k in save_data.achievements) {
+    if (save_data.achievements[k]) {
       if (Achievements.hasOwnProperty(k)) {
         mult *= 1 + 0.01 * Achievements[k];
       } else {
@@ -244,21 +266,21 @@ function Import() {
     }
   }
   AchievementMultiplier = mult;
-  for (var k in data.upgrades) {
-    if (data.upgrades[k] && Upgrades.hasOwnProperty(k)) {
+  for (var k in save_data.upgrades) {
+    if (save_data.upgrades[k] && Upgrades.hasOwnProperty(k)) {
       mult *= 1 + 0.01 * Upgrades[k];
     }
   }
   for (var k in Upgrades) {
     AchievementMultiplier *= (1 + 0.01 * Upgrades[k]);
   }
-  AbaddonMultiplier = data.allDpsMultiplier / mult;
+  AbaddonMultiplier = save_data.allDpsMultiplier / mult;
 
-  Seed = data.ancients.ancientsRoller.seed;
+  Seed = save_data.ancients.ancientsRoller.seed;
   var levels = {};
   OwnedNotInList = 0;
   for (var i = 3; i <= 28; i++) {
-    if (data.ancients.ancients.hasOwnProperty(i)) {
+    if (save_data.ancients.ancients.hasOwnProperty(i)) {
       levels[i] = true;
       OwnedNotInList += 1;
     }
@@ -268,13 +290,13 @@ function Import() {
       OwnedNotInList -= 1;
     }
   }
-  UpdateAncientPrices(levels, data.ancients.didGetVaagur);
+  UpdateAncientPrices(levels, save_data.ancients.didGetVaagur);
 
-  $("#soulsin").val(data.heroSouls + ($("#addsouls").prop("checked") ? ascSouls : 0));
+  $("#soulsin").val(save_data.heroSouls + ($("#addsouls").prop("checked") ? ascSouls : 0));
   for (var k in Ancients) {
     if (Ancients.hasOwnProperty(k)) {
-      if (data.ancients.ancients[Ancients[k].id]) {
-        Ancients[k].level.val(data.ancients.ancients[Ancients[k].id].level);
+      if (save_data.ancients.ancients[Ancients[k].id]) {
+        Ancients[k].level.val(save_data.ancients.ancients[Ancients[k].id].level);
       } else {
         Ancients[k].level.val(0);
       }
@@ -319,14 +341,6 @@ function AncientPrice(ancient, level) {
   return price;
 }
 
-var curAddAncients = null;
-var curLevels = null;
-var curUsed = null;
-var curSouls = null;
-var curActivity = null;
-var curOutFactor = null;
-
-var computeThread = null;
 function onAddAncient(e) {
   var ancient = e.data.ancient;
   var ratio = e.data.outFactor.ratio;
