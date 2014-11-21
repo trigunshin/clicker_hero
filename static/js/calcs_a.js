@@ -1,11 +1,3 @@
-$("#idlemode").change(function() {
-  if (this.checked) {
-    $("#nonidle").slideUp();
-  } else {
-    $("#nonidle").slideDown();
-  }
-});
-
 var AbaddonMultiplier = null;
 
 var GildedHeroes = [0, 0, 0, 0, 0,
