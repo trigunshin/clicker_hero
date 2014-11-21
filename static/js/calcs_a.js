@@ -1,6 +1,7 @@
 
 // initialization
 var AbaddonMultiplier = null;
+// used in Import as well as each Compute() method
 var GildedHeroes = [0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0,
@@ -145,7 +146,6 @@ function RandRoll(cnt) {
   }
 }
 function GetAncientsList(levels, first) {
-  var SaveSeed = Seed;
   var remains = [];
   for (var i = AncientMin; i <= AncientMax; i++) {
     if (!levels[i]) {
@@ -165,7 +165,6 @@ function GetAncientsList(levels, first) {
       count++;
     }
   }
-  Seed = SaveSeed;
   return out;
 }
 function SetDifference(a, b) {
