@@ -18,14 +18,20 @@
     $('#flash_container').animate({ left: "-2000px"},1000);
     $('#flash_container').animate({ left: "0"},1000);
 -->
-<div id="clicker_container" class="row">
-    <!-- calculator area -->
-    <div id='calc_template_section' class='span6'>
-        <div id='calc_template_anchor'></div>
-    </div>
-    <!-- game area -->
-    <div id='game_template_section' class='span6'>
-        <div id='game_template_anchor'></div>
+<div id="container" class="row">
+    <div id="clicker_container" class="row">
+        <!-- calculator area -->
+        <div id='calc_template_section' class='offset1 span6'>
+            <div id='calc_template_anchor'></div>
+        </div>
+        <!-- calculator config area -->
+        <div id='calc_config_template_section' class='span5'>
+            <div id='calc_config_anchor'></div>
+            <!-- game area -->
+            <div id='game_template_section'>
+                <div id='game_template_anchor'></div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
@@ -81,7 +87,7 @@
         </div>
     </div>
 </script>
-<script id="calc_area_template" type="text/template" class="template">
+<script id="calc_config_template" type="text/template" class="template">
     <div class='row'>
         <textarea id="savedata" class='span2' onfocus="this.select()" onmouseup="return false"></textarea>
         <input type="button" class='span2' value="Import" onclick="ImportClick()"></input>
@@ -135,6 +141,8 @@
             <label><input type="checkbox" id="addsouls" checked="checked"></input>Include souls gained after ascension</label>
         </div>
     </div>
+</script>
+<script id="calc_area_template" type="text/template" class="template">
     <div class='row'>
         <div id="herodiv" class='span6'>
             <table id="herotbl" border="0" cellspacing="0">

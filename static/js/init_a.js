@@ -11,11 +11,16 @@ var game_template_data = {
 $('#game_template_anchor').after(game_template(game_template_data));
 
 // calculator render
+var calc_config_template = _.template(
+    $("script#calc_config_template").html()
+);
 var calc_template = _.template(
     $("script#calc_area_template").html()
 );
 var calc_template_data = {};
 $('#calc_template_anchor').after(calc_template(calc_template_data));
+var calc_config_template_data = {};
+$('#calc_config_anchor').after(calc_config_template(calc_config_template_data));
 
 // set up on-click for game reload button
 $('div#reload_flash').click(function() {
