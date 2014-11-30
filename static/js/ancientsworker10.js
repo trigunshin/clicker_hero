@@ -71,18 +71,19 @@ var TotalUpgradeCost =
   //1e146 + 25e145 + 1e147 + 8e147 + // alabaster
   //1e161 + 25e160 + 1e162 + 8e162 + // astraea
   0;
-var BaseHSSouls = (Math.log(Heroes[24].cost / 20) / Math.log(1.07) + 1) / 2000;
+  console.log(Heroes[28]);
+var BaseHSSouls = (Math.log(Heroes[28].cost / 20) / Math.log(1.07) + 1) / 2000;
 for (var i = 0; i < Heroes.length; i++) {
-  var lvl = Math.log(Heroes[24].cost / Heroes[i].cost) / Math.log(1.07) + 1;
+  var lvl = Math.log(Heroes[28].cost / Heroes[i].cost) / Math.log(1.07) + 1;
   BaseHSSouls += lvl / 2000;
   Heroes[i].gilded = 0;
 }
 function GetHeroLevelSouls(gold) {
   gold /= 26;
-  if (gold < Heroes[24].cost) {
+  if (gold < Heroes[28].cost) {
     return 0;
   }
-  return Math.floor(BaseHSSouls + Math.log(0.07 * (gold - Heroes[24].cost) / Heroes[24].cost + 1) / Math.log(1.07) * 26 / 2000);
+  return Math.floor(BaseHSSouls + Math.log(0.07 * (gold - Heroes[28].cost) / Heroes[28].cost + 1) / Math.log(1.07) * 26 / 2000);
 }
 
 var Ancients = {
