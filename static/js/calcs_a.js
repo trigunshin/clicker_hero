@@ -253,7 +253,8 @@ function Import(save_data) {
   for (var k in heroes) {
     var id = parseInt(k);
     ascSouls += heroes[k].level;
-    if (id < 2 || id > 26) continue;
+    // XXX hardcoded to phthalo
+    if (id < 2 || id > 30) continue;
     GildedHeroes[id - 2] = heroes[k].epicLevel;
   }
   ascSouls = Math.floor(ascSouls / 2000) + save_data.primalSouls;
