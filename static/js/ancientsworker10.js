@@ -28,11 +28,11 @@ var Heroes = [
   {name: "Atlas", cost: 1e55, damage: 1075e42 * 20, level: 100},
   {name: "Terra", cost: 1e70, damage: 7926e54 * 20, level: 100},
   {name: "Phthalo", cost: 1e85, damage: 5839e67 * 20, level: 100},
-  //{name: "Orntchya Gladeye, Didensy Banana", cost: 1e100, damage: 3302e80 * 20, level: 100},
-  //{name: "Lilin", cost: 1e115, damage: 3170e93 * 20, level: 100},
-  //{name: "Cadmia", cost: 1e130, damage: 2335e106 * 20, level: 100},
-  //{name: "Alabaster", cost: 1e145, damage: 1721e119 * 20, level: 100},
-  //{name: "Astraea", cost: 1e160, damage: 1268e132 * 20, level: 100},
+  {name: "Orntchya Gladeye, Didensy Banana", cost: 1e100, damage: 3302e80 * 20, level: 100},
+  {name: "Lilin", cost: 1e115, damage: 3170e93 * 20, level: 100},
+  {name: "Cadmia", cost: 1e130, damage: 2335e106 * 20, level: 100},
+  {name: "Alabaster", cost: 1e145, damage: 1721e119 * 20, level: 100},
+  {name: "Astraea", cost: 1e160, damage: 1268e132 * 20, level: 100},
 ];
 var TotalUpgradeCost =
   100 + 250 + 1e3 + 8e3 + 80e3 + 400e3 + 4e6 + // cid
@@ -65,11 +65,11 @@ var TotalUpgradeCost =
   1e56 + 25e55 + 1e57 + 8e57 + // atlas
   1e71 + 25e70 + 1e72 + 8e72 + // terra
   1e86 + 25e85 + 1e87 + 8e87 + // phthalo
-  //1e101 + 25e100 + 1e102 + 8e102 + // orntchya
-  //1e116 + 25e115 + 1e117 + 8e117 + // lilin
-  //1e131 + 25e130 + 1e132 + 8e132 + // cadmia
-  //1e146 + 25e145 + 1e147 + 8e147 + // alabaster
-  //1e161 + 25e160 + 1e162 + 8e162 + // astraea
+  1e101 + 25e100 + 1e102 + 8e102 + // orntchya
+  1e116 + 25e115 + 1e117 + 8e117 + // lilin
+  1e131 + 25e130 + 1e132 + 8e132 + // cadmia
+  1e146 + 25e145 + 1e147 + 8e147 + // alabaster
+  1e161 + 25e160 + 1e162 + 8e162 + // astraea
   0;
 var BaseHSSouls = (Math.log(Heroes[28].cost / 20) / Math.log(1.07) + 1) / 2000;
 for (var i = 0; i < Heroes.length; i++) {
