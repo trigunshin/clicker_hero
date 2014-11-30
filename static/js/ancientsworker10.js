@@ -24,34 +24,53 @@ var Heroes = [
   {name: "Shinatobe, Wind Deity", cost: 14e21, damage: 917e15 * 8, level: 100},
   {name: "Grant, the General", cost: 4199e21, damage: 202e18 * 4, level: 75},
   {name: "Frostleaf", cost: 2100e24, damage: 74698e18 * 4, level: 75},
+  {name: "Dread Knight", cost: 1e40, damage: 146e30 * 20, level: 100},
+  {name: "Atlas", cost: 1e55, damage: 1075e42 * 20, level: 100},
+  {name: "Terra", cost: 1e70, damage: 7926e54 * 20, level: 100},
+  {name: "Phthalo", cost: 1e85, damage: 5839e67 * 20, level: 100},
+  //{name: "Orntchya Gladeye, Didensy Banana", cost: 1e100, damage: 3302e80 * 20, level: 100},
+  //{name: "Lilin", cost: 1e115, damage: 3170e93 * 20, level: 100},
+  //{name: "Cadmia", cost: 1e130, damage: 2335e106 * 20, level: 100},
+  //{name: "Alabaster", cost: 1e145, damage: 1721e119 * 20, level: 100},
+  //{name: "Astraea", cost: 1e160, damage: 1268e132 * 20, level: 100},
 ];
 var TotalUpgradeCost =
-  100 + 250 + 1e3 + 8e3 + 80e3 + 400e3 + 4e6 +
-  500 + 1.25e3 + 5e3 + 40e3 + 400e3 +
-  2.5e3 + 6.25e3 + 25e3 + 200e3 + 2e6 + 10e6 +
-  10e3 + 25e3 + 100e3 + 800e3 +
-  40e3 + 100e3 + 400e3 + 3.2e6 + 32e6 +
-  200e3 + 500e3 + 2e6 + 16e6 + 160e6 +
-  1e6 + 2.5e6 + 10e6 + 80e6 +
-  4e6 + 10e6 + 40e6 + 320e6 +
-  25e6 + 62.5e6 + 250e6 + 2e9 +
-  150e6 + 375e6 + 1.5e9 + 12e9 + 120e9 +
-  1e9 + 2.5e9 + 10e9 + 80e9 +
-  8e9 + 20e9 + 80e9 + 640e9 + 6.4e12 +
-  65e9 + 162e9 + 650e9 + 5.2e12 + 52e12 +
-  500e9 + 1.25e12 + 5e12 + 40e12 + 400e12 +
-  4.5e12 + 11.25e12 + 45e12 + 360e12 + 3.6e15 +
-  40e12 + 100e12 + 400e12 + 3.2e15 + 32e15 + 160e15 +
-  360e12 + 900e12 + 3.6e15 + 28.8e15 + 288e15 +
-  3.2e15 + 8e15 + 32e15 + 256e15 +
-  27e15 + 67.5e15 + 270e15 + 2.16e18 +
-  240e15 + 600e15 + 2.4e18 + 19.2e18 +
-  3e18 + 7.5e18 + 30e18 + 240e18 + 2.4e21 +
-  90e18 + 225e18 + 900e18 + 7.2e21 +
-  3.5e21 + 8.75e21 + 35e21 + 280e21 + 2.8e24 +
-  140e21 + 350e21 + 1.4e24 + 11.2e24 + 112e24 +
-  41.999e24 + 104e24 + 419e24 + 3.359e27 +
-  21e27 + 52.499e27 + 209e27 + 1.679e30;
+  100 + 250 + 1e3 + 8e3 + 80e3 + 400e3 + 4e6 + // cid
+  500 + 1.25e3 + 5e3 + 40e3 + 400e3 + // treebeast
+  2.5e3 + 6.25e3 + 25e3 + 200e3 + 2e6 + 10e6 + // ivan
+  10e3 + 25e3 + 100e3 + 800e3 + // brittany
+  40e3 + 100e3 + 400e3 + 3.2e6 + 32e6 + // wandering
+  200e3 + 500e3 + 2e6 + 16e6 + 160e6 + // betty
+  1e6 + 2.5e6 + 10e6 + 80e6 + // samurai
+  4e6 + 10e6 + 40e6 + 320e6 + // leon
+  25e6 + 62.5e6 + 250e6 + 2e9 + // forest seer
+  150e6 + 375e6 + 1.5e9 + 12e9 + 120e9 + // alexa
+  1e9 + 2.5e9 + 10e9 + 80e9 + // natalia
+  8e9 + 20e9 + 80e9 + 640e9 + 6.4e12 + // mercedes
+  65e9 + 162e9 + 650e9 + 5.2e12 + 52e12 + // bobby
+  500e9 + 1.25e12 + 5e12 + 40e12 + 400e12 + // broyle
+  4.5e12 + 11.25e12 + 45e12 + 360e12 + 3.6e15 + // sir george
+  40e12 + 100e12 + 400e12 + 3.2e15 + 32e15 + 160e15 + // king midas
+  360e12 + 900e12 + 3.6e15 + 28.8e15 + 288e15 + // referi
+  3.2e15 + 8e15 + 32e15 + 256e15 + // abaddon
+  27e15 + 67.5e15 + 270e15 + 2.16e18 + // ma zhu
+  240e15 + 600e15 + 2.4e18 + 19.2e18 + // amenhotep
+  3e18 + 7.5e18 + 30e18 + 240e18 + 2.4e21 + // beastlord
+  90e18 + 225e18 + 900e18 + 7.2e21 + // athena
+  3.5e21 + 8.75e21 + 35e21 + 280e21 + 2.8e24 + // aphrodite
+  140e21 + 350e21 + 1.4e24 + 11.2e24 + 112e24 + // shinatobe
+  41.999e24 + 104e24 + 419e24 + 3.359e27 + // grant
+  21e27 + 52.499e27 + 209e27 + 1.679e30 + // frostleaf
+  1e41 + 25e40 + 1e42 + 8e42 + // dread knight
+  1e56 + 25e55 + 1e57 + 8e57 + // atlas
+  1e71 + 25e70 + 1e72 + 8e72 + // terra
+  1e86 + 25e85 + 1e87 + 8e87 + // phthalo
+  //1e101 + 25e100 + 1e102 + 8e102 + // orntchya
+  //1e116 + 25e115 + 1e117 + 8e117 + // lilin
+  //1e131 + 25e130 + 1e132 + 8e132 + // cadmia
+  //1e146 + 25e145 + 1e147 + 8e147 + // alabaster
+  //1e161 + 25e160 + 1e162 + 8e162 + // astraea
+  0;
 var BaseHSSouls = (Math.log(Heroes[24].cost / 20) / Math.log(1.07) + 1) / 2000;
 for (var i = 0; i < Heroes.length; i++) {
   var lvl = Math.log(Heroes[24].cost / Heroes[i].cost) / Math.log(1.07) + 1;
