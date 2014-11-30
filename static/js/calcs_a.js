@@ -429,7 +429,12 @@ function onFinishCompute(e) {
       var k = curAddAncients[i].ancient;
       var levels = $.extend({}, curLevels);
       levels[k] = 1;
-      computeThread.postMessage({cmd: "Compute", levels: levels, souls: curSouls - Ancients[k].price,
+
+      // remove iris/khrysos due to calc errors
+      var fin_fixed_levels = jQuery.extend({}, levels);
+      fin_fixed_levels.iris = 0;
+      fin_fixed_levels.khrysos = 0;
+      computeThread.postMessage({cmd: "Compute", levels: fin_fixed_levels, souls: curSouls - Ancients[k].price,
         gilded: GildedHeroes, activity: curActivity, damageFactor: AchievementMultiplier, ancient: k, used: curUsed});
     }
     curLevels = null;
@@ -498,9 +503,10 @@ function StartCompute() {
   curActivity = activity;
   curUsed = used;
 
-  var ancient_levels = jQuery.extend({}, levels);
-  ancient_levels.iris = 0;
-  ancient_levels.khrysos = 0
-  computeThread.postMessage({cmd: "Compute", levels: ancient_levels, souls: souls, gilded: GildedHeroes, activity: activity,
+  // remove iris/khrysos due to calc errors
+  var fixed_levels = jQuery.extend({}, levels);
+  fixed_levels.iris = 0;
+  fixed_levels.khrysos = 0;
+  computeThread.postMessage({cmd: "Compute", levels: fixed_levels, souls: souls, gilded: GildedHeroes, activity: activity,
     damageFactor: AchievementMultiplier, used: used});
 }
