@@ -6,7 +6,11 @@ var GildedHeroes = [0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0];
+                    0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 
+                    // XXX ignore banana cuz i'm not there yet
+                    //0, 0, 0, 0, 0
+                    ];
 var Achievements = {
   "13": 1, // hoard
   "14": 2, // hoard
