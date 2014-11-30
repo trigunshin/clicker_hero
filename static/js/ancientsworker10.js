@@ -71,7 +71,6 @@ var TotalUpgradeCost =
   //1e146 + 25e145 + 1e147 + 8e147 + // alabaster
   //1e161 + 25e160 + 1e162 + 8e162 + // astraea
   0;
-  console.log(Heroes[28]);
 var BaseHSSouls = (Math.log(Heroes[28].cost / 20) / Math.log(1.07) + 1) / 2000;
 for (var i = 0; i < Heroes.length; i++) {
   var lvl = Math.log(Heroes[28].cost / Heroes[i].cost) / Math.log(1.07) + 1;
