@@ -18,10 +18,10 @@
     $('#flash_container').animate({ left: "-2000px"},1000);
     $('#flash_container').animate({ left: "0"},1000);
 -->
-<div id="container" class="row">
+<div id="container">
     <div id="clicker_container" class="row">
         <!-- calculator area -->
-        <div id='calc_template_section' class='offset1 span6'>
+        <div id='calc_template_section' class='span7'>
             <div id='calc_template_anchor'></div>
         </div>
         <!-- calculator config area -->
@@ -88,14 +88,13 @@
     </div>
 </script>
 <script id="calc_config_template" type="text/template" class="template">
-    <div class='row'>
-        <textarea id="savedata" class='span2' onfocus="this.select()" onmouseup="return false"></textarea>
+    <div>
+        <input id="savedata" class='span1' onfocus="this.select()" onmouseup="return false" type='text'></input>
         <input type="button" class='span2' value="Import" onclick="ImportClick()"></input>
-        <div id="reload_flash" class='span2'>
+        <br>
+        <div id="reload_flash">
             <button class="btn btn-large btn-inverse">Reload Game</button>
-        </div>
-        <div class='span1'>
-            <input type="button" class='btn btn-large' value="Rerun Calcs" onclick="StartCompute()"></input>
+            <button class='btn btn-large' onclick="StartCompute()">Rerun Calcs</button>
         </div>
     </div>
     <div class='row'>
@@ -135,19 +134,43 @@
         </div>
     </div>
 </script>
+<script id="ancient_row_template" type="text/template" class="template">
+    <tr id='<%- rc.name %>_data_row'>
+        <td>
+            <span class='span2' title='<%- rc.description %>'>
+                <input id='<%- rc.name %>_used' type='checkbox' title='Optimize' <%= rc.checked ?  'checked' : '' %>></input>
+                <%- rc.display_name %>
+            </span>
+        </td>
+        <td>
+            <p id='<%- rc.name %>_level' class='span2'>0</p>
+        </td>
+        <td>
+            <p id='<%- rc.name %>_target' class='span2'>0</p>
+        </td>
+    </tr>
+</script>
 <script id="calc_area_template" type="text/template" class="template">
-    <div class='row'>
-        <div id="herodiv" class='span6'>
-            <table id="herotbl" border="0" cellspacing="0">
-                <tr><th>Ancient</th><th>Current</th><th>Target</th></tr>
-                <tr>
-                    <td>Hero Souls</td>
-                    <td><input type="text" id="soulsin" value="0"></input></td>
-                    <td><input type="text" id="soulsout" readonly="readonly" tabindex="-1"></input></td>
-                </tr>
-            </table>
-        </div>
-    </div>
+    <table id="ancient_table" class='table table-condensed'>
+        <thead>
+            <tr>
+                <th><p class='span1'>Ancient</p></th>
+                <th><p class='span2'>Current</p></th>
+                <th><p class='span2'>Target</p></th>
+            </tr>
+        </thead>
+        <tbody id="ancient_table_body">
+            <tr>
+                <td><p class='span1'>Hero Souls</p></td>
+                <td>
+                    <p class='span2' id="soulsin">0</p>
+                </td>
+                <td>
+                    <p class='span2' id="soulsout">0</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </script>
 <script src="static/js/init_a.js"></script>
 <script language="javascript" src='static/js/calcs_a.js'></script>

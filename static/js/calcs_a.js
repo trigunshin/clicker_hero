@@ -111,19 +111,27 @@ for (var k in Ancients) {
 }
 ancientList.sort();
 
+
+// set up ancient templating
+var ancient_row_template = _.template(
+    $("script#ancient_row_template").html()
+);
+
 for (var i = 0; i < ancientList.length; i++) {
   var key = ancientList[i];
-  var tr = $("<tr></tr>");
-  Ancients[key].used = $("<input></input>").attr("type", "checkbox").attr("title", "Optimize this ancient");
-  if (key != "khrysos" && key != "iris") {
-    Ancients[key].used.prop("checked", true);
-  }
-  tr.append($("<td></td>").append(Ancients[key].used).append($("<span></span>").text(Ancients[key].name).attr("title", Ancients[key].desc)));
-  Ancients[key].level = $("<input></input>").attr("type", "text").val(0);
-  Ancients[key].target = $("<input></input>").attr("type", "text").attr("readonly", "readonly").attr("tabindex", "-1");
-  Ancients[key].targetBox = $("<td></td>").append(Ancients[key].target);
-  tr.append($("<td></td>").append(Ancients[key].level)).append(Ancients[key].targetBox);
-  $("#herotbl").append(tr);
+  var ancient_display_name = Ancients[key].name.split(", ")[0];
+
+  var ancient_data = {
+    name: ancient_display_name,
+    display_name: ancient_display_name,
+    description: Ancients[key].desc
+  };
+  if (key != "khrysos" && key != "iris") ancient_data.checked = true;
+  $("#ancient_table_body").append(ancient_row_template(ancient_data));
+  Ancients[key].used=$("#"+ancient_display_name+"_used");
+  Ancients[key].level=$("#"+ancient_display_name+"_level");
+  Ancients[key].target=$("#"+ancient_display_name+"_target");
+  Ancients[key].data_row=$("#"+ancient_display_name+"_data_row");
 }
 
 var ANTI_CHEAT_CODE = "Fe12NAfA3R6z4k0z";
@@ -294,13 +302,13 @@ function Import(save_data) {
   }
   UpdateAncientPrices(levels, save_data.ancients.didGetVaagur);
 
-  $("#soulsin").val(save_data.heroSouls + ($("#addsouls").prop("checked") ? ascSouls : 0));
+  $("#soulsin").html(save_data.heroSouls + ($("#addsouls").prop("checked") ? ascSouls : 0));
   for (var k in Ancients) {
     if (Ancients.hasOwnProperty(k)) {
       if (save_data.ancients.ancients[Ancients[k].id]) {
-        Ancients[k].level.val(save_data.ancients.ancients[Ancients[k].id].level);
+        Ancients[k].level.html(save_data.ancients.ancients[Ancients[k].id].level);
       } else {
-        Ancients[k].level.val(0);
+        Ancients[k].level.html(0);
       }
     }
   }
@@ -381,25 +389,27 @@ function onFinishCompute(e) {
 
   var soulsSpent = 0;
   for (var k in Ancients) {
-    var level = parseInt(Ancients[k].level.val());
+    var level = parseInt(Ancients[k].level.html(), 10);
     for (var lvl = 2; lvl <= level; lvl++) {
       soulsSpent += AncientPrice(k, lvl);
     }
   }
 
-  $("#soulsout").val(souls);
   for (var k in Ancients) {
     if (Ancients.hasOwnProperty(k)) {
-      var oldLevel = parseInt(Ancients[k].level.val());
+      var oldLevel = parseInt(Ancients[k].level.html());
       if (levels[k] > oldLevel) {
-        Ancients[k].targetBox.addClass("hilite");
-        Ancients[k].target.val(levels[k] + " (+" + (levels[k] - oldLevel) + ")");
+        Ancients[k].data_row.addClass("success");
+        Ancients[k].target.html(levels[k] + " (+" + (levels[k] - oldLevel) + ")");
       } else {
-        Ancients[k].targetBox.removeClass("hilite");
-        Ancients[k].target.val(levels[k] ? levels[k] : "");
+        Ancients[k].data_row.removeClass("success");
+        Ancients[k].target.html(levels[k] ? levels[k] : "");
       }
     }
   }
+  var soul_diff = parseInt($("#soulsin").html(), 10) - souls;
+  $("#soulsout").html(souls+" (-"+soul_diff+")");
+
   var outLog = "";
   outLog += "Souls/hour: " + Math.round(outFactor.ratio * 3600) + "<br/>\n";
   outLog += "Optimal level: " + outFactor.level + ", souls: " + Math.round(outFactor.souls) + ", time: " + FormatTime(outFactor.time) + "<br/>\n";
@@ -447,7 +457,7 @@ function onFinishCompute(e) {
     $(".buybtn").click(function() {
       var aid = $(this).attr("aid");
       Ancients[aid].level.val(1);
-      $("#soulsin").val(parseInt($("#soulsin").val()) - Ancients[aid].price);
+      $("#soulsin").html(parseInt($("#soulsin").html()) - Ancients[aid].price);
       StartCompute();
     });
   }
@@ -459,7 +469,7 @@ function StartCompute() {
   var owned = OwnedNotInList;
   for (var k in Ancients) {
     if (Ancients.hasOwnProperty(k)) {
-      levels[k] = parseInt(Ancients[k].level.val());
+      levels[k] = parseInt(Ancients[k].level.html());
       if (levels[k]) {
         owned++;
       }
@@ -468,7 +478,7 @@ function StartCompute() {
       }
     }
   }
-  var souls = parseInt($("#soulsin").val());
+  var souls = parseInt($("#soulsin").html());
 
   if (computeThread) {
     computeThread.terminate();
