@@ -94,9 +94,12 @@
         <div id="reload_flash" class='span2'>
             <button class="btn btn-large btn-inverse">Reload Game</button>
         </div>
+        <div class='span1'>
+            <input type="button" class='btn btn-large' value="Rerun Calcs" onclick="StartCompute()"></input>
+        </div>
     </div>
     <div class='row'>
-        <div class='span3'>
+        <div class='span1'>
             <label><input type="checkbox" id="idlemode" checked="checked"></input>Idle mode</label>
             <div id="nonidle" style="display: none">
                 <table border="0">
@@ -123,16 +126,6 @@
                     </tr>
                 </table>
             </div>
-        </div>
-    </div>
-    <div class='row'>
-        <div class='span3'>
-            <label>Argaiv gild multiple: <input type="text" id="gildlevel" value="0" style="width: 100px"></input></label>
-        </div>
-    </div>
-    <div class='row'>
-        <div class='span1'>
-            <input type="button" value="Update" onclick="StartCompute()"></input>
         </div>
         <div class='span1'>
             <label><input type="checkbox" id="suggestbuy" checked="checked"></input>Suggest ancients</label>
