@@ -441,7 +441,7 @@ function Compute(levels, used, souls, gilded, activity, damageFactor, retAncient
       var realSouls = curSouls + GetHeroLevelSouls(curGold);
       if (!best || realSouls / curTime > best.ratio) {
         best = {level: level, time: curTime, souls: realSouls, ratio: realSouls / curTime};
-      } 
+      }
     }
     return best;
   };
