@@ -6,7 +6,7 @@ var game_template = _.template(
 var game_template_data = {
     height: 640,
     width: 1136,
-    ch_version: 2448
+    ch_version: 2492
 };
 $('#game_template_anchor').after(game_template(game_template_data));
 
