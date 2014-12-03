@@ -23,7 +23,7 @@ var calc_config_template_data = {};
 $('#calc_config_anchor').after(calc_config_template(calc_config_template_data));
 
 // set up on-click for game reload button
-$('div#reload_flash').click(function() {
+$('#reload_flash').click(function() {
      var clone = $('#flashContent object').clone();
       $('#flashContent object').remove();
      $('#flashContent').append(clone);
