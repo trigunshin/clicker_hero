@@ -19,13 +19,22 @@
     $('#flash_container').animate({ left: "0"},1000);
 -->
 <div id="container">
-    <div id="clicker_container" class="row">
+    <div id="clicker_container" class="row tabbale">
         <!-- calculator area -->
-        <div id='calc_template_section' class='span7'>
-            <div id='calc_template_anchor'></div>
+        <div id='calc_template_section' class='span7 tab-content'>
+            <div id="ancient_calc_tab" class='tab-pane active'>
+                <div id='calc_template_anchor'></div>
+            </div>
+            <div id="hero_calc_tab" class="tab-pane">
+                <p>Hero calc will go here someday.</p>
+            </div>
         </div>
         <!-- calculator config area -->
         <div id='calc_config_template_section' class='span5'>
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#ancient_calc_tab" data-toggle="tab">Ancients</a></li>
+                <li><a href="#hero_calc_tab" data-toggle="tab">Heroes (TODO)</a></li>
+            </ul>
             <div id='calc_config_anchor'></div>
             <!-- game area -->
             <div id='game_template_section'>
@@ -35,10 +44,10 @@
     </div>
 </div>
 </body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
 
 <!-- templates -->
