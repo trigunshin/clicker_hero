@@ -405,6 +405,11 @@ function Compute(levels, used, souls, gilded, activity, damageFactor, retAncient
 
   var Simulate = function(noMorgulis) {
     var factors = getFactors(noMorgulis || !used.morgulis);
+    /*
+    TODO investigate curTime value as a function of iris & http://www.reddit.com/r/ClickerHeroes/comments/2o2pbi/rivsoft_calculator_unofficial_017_version/cmja5lr
+    var curGold = (levels.khrysos ? Heroes[levels.khrysos - 1].cost : 0) + 10 * MonsterLife(1 + levels.iris) * MonsterGoldFactor(1 + levels.iris);
+    var curTime = 60;
+    //*/
     var curGold = (levels.khrysos ? Heroes[levels.khrysos - 1].cost : 0);
     var curTime = 0;
     var curSouls = 0;
