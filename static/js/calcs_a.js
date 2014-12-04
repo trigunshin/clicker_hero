@@ -124,9 +124,9 @@ for (var i = 0; i < ancientList.length; i++) {
   var ancient_data = {
     name: ancient_display_name,
     display_name: ancient_display_name,
-    description: Ancients[key].desc
+    description: Ancients[key].desc,
+    checked: true
   };
-  if (key != "khrysos" && key != "iris") ancient_data.checked = true;
   $("#ancient_table_body").append(ancient_row_template(ancient_data));
   Ancients[key].used=$("#"+ancient_display_name+"_used");
   Ancients[key].level=$("#"+ancient_display_name+"_level");
