@@ -40,7 +40,7 @@ var BaseHSSouls = (Math.log(Heroes[33].cost / 20) / Math.log(1.07) + 1) / 2000;
 for (var i = 0; i < Heroes.length; i++) {
   var lvl = Math.log(Heroes[33].cost / Heroes[i].cost) / Math.log(1.07) + 1;
   BaseHSSouls += lvl / 2000;
-  Heroes[i].gilded = 0;
+  Heroes[i].gilded = Heroes[i].gilded ? Heroes[i].gilded : 0;
 }
 function GetHeroLevelSouls(gold) {
   gold /= 26;
@@ -247,8 +247,8 @@ function LevelingPlan(argaiv, damageFactor) {
     if (gold < this.curCost) {
       return this.curDamage * Math.pow(gold / this.curCost, 0.8);
     } else if (this.planPos < this.plan.length) {
-      return this.curDamage + (this.plan[this.planPos].damage - this.curDamage) * (gold - this.curCost) /
-        (this.plan[this.planPos].cost - this.curCost);
+      var costRatio = (gold - this.curCost) / (this.plan[this.planPos].cost - this.curCost);
+      return this.curDamage + (this.plan[this.planPos].damage - this.curDamage) * costRatio;
     } else {
       return this.curDamage * (1 + Math.log(gold / this.curCost) / (Math.log(1.07) * 4100));
     }
@@ -413,20 +413,20 @@ function Compute(levels, used, souls, gilded, activity, damageFactor, retAncient
 
   var Simulate = function(noMorgulis) {
     var factors = getFactors(noMorgulis || !used.morgulis);
-    var curGold = (levels.khrysos ? Heroes[levels.khrysos - 1].cost : 0) + 10 * MonsterLife(1 + levels.iris) * MonsterGoldFactor(1 + levels.iris);
-    var curTime = 0;
+    var curGold = (levels.khrysos ? Heroes[levels.khrysos - 1].cost : 0) + 10 * MonsterLife(2 + levels.iris) * MonsterGoldFactor(2 + levels.iris);
+    var curTime = 60;
     var curSouls = 0;
     var solomon = 1 + 0.01 * SolomonValue(levels.solomon);
     var clicks = 0;
     plan.Start(levels.argaiv, levels.dogcog);
     var best = null;
-    for (var level = 5; level <= 2000; level += 5) {
-      if (level < 1 + levels.iris) {
+    for (var level = 5; level <= 4000; level += 5) {
+      if (level < 2 + levels.iris) {
         continue;
       }
       var waves = Math.min(5, level - levels.iris);
       var numDelays = (9 - levels.kumawakamaru) * (waves - 1);
-      var levelInfo = GetLevelInfo(level, 1 + levels.iris);
+      var levelInfo = GetLevelInfo(level, 2 + levels.iris);
 
       var addGold = levelInfo[1] * factors.gold;
       var curDamage = Math.max(plan.GetDamage(curGold), 10);
@@ -462,10 +462,9 @@ function Compute(levels, used, souls, gilded, activity, damageFactor, retAncient
       var bestInfo = null;
       var bestFactor = 0;
       for (var k in Ancients) {
-        if (k == "iris" && (levels[k] - 4) % 5 == 0) {
+        if (k == "iris" && levels[k] % 5 == 3) {
           //handle iris specially (skipping boss levels, which break the iterative optimizer)
-          var price = 0;
-          price = AncientPrice(k, levels[k] + 2) + AncientPrice(k, levels[k] + 1);
+          var price = price = AncientPrice(k, levels[k] + 2) + AncientPrice(k, levels[k] + 1);
           if (souls >= price && (!Ancients[k].maxlvl || levels[k] < Ancients[k].maxlvl)) {
             levels[k] += 2;
             souls -= price;
@@ -499,7 +498,7 @@ function Compute(levels, used, souls, gilded, activity, damageFactor, retAncient
       if (!bestAncient) {
         break;
       }
-      if (bestAncient == "iris" && (levels[k] - 4) % 5 == 0) {
+      if (bestAncient == "iris" && levels[k] % 5 == 3) {
         souls -= AncientPrice(bestAncient, levels[bestAncient] + 1);
         souls -= AncientPrice(bestAncient, levels[bestAncient] + 2);
         levels[bestAncient] += 2;
