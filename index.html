@@ -28,12 +28,19 @@
             <div id="hero_calc_tab" class="tab-pane">
                 <p>Hero calc will go here someday.</p>
             </div>
+            <div id="chat_tab" class="tab-pane">
+                <div id='firechat-wrapper'>
+                  <a href='#' onclick='login("facebook");'>Login (fb)</a>
+                  <a href='#' onclick='login("facebook");'>Login (goog)</a>
+                </div>
+            </div>
         </div>
         <!-- calculator config area -->
         <div id='calc_config_template_section' class='span5'>
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#ancient_calc_tab" data-toggle="tab">Ancients</a></li>
                 <li><a href="#hero_calc_tab" data-toggle="tab">Heroes (TODO)</a></li>
+                <li><a href="#chat_tab" data-toggle="tab">Chat (TODO)</a></li>
             </ul>
             <div id='calc_config_anchor'></div>
             <!-- game area -->
@@ -181,7 +188,16 @@
         </tbody>
     </table>
 </script>
+
+<!-- Requires jquery -->
+<script src='https://cdn.firebase.com/js/client/2.0.2/firebase.js'></script>
+<!-- Firechat -->
+<link rel='stylesheet' href='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.css' />
+<script src='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.js'></script>
+
+<!-- Load init scripts last -->
 <script src="static/js/init_a.js"></script>
 <script language="javascript" src='static/js/calcs_a.js'></script>
 <link rel="stylesheet" type="text/css" href="static/css/calc_a_styles.css">
+
 </html>
