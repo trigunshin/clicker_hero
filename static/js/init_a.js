@@ -6,7 +6,7 @@ var game_template = _.template(
 var game_template_data = {
     height: 640,
     width: 1136,
-    ch_version: 2492
+    ch_version: 3670
 };
 $('#game_template_anchor').after(game_template(game_template_data));
 
@@ -36,24 +36,3 @@ $("#idlemode").change(function() {
     $("#nonidle").slideDown();
   }
 });
-
-// set up chat
-// Create a new Firebase reference, and a new instance of the Login client
-var chatRef = new Firebase('https://incandescent-torch-6939.firebaseio.com/chat');
-chatRef.onAuth(function(authData) {
-  // Once authenticated, instantiate Firechat with our user id and user name
-  console.log('auth data:'+JSON.stringify(authData));
-  if (authData) {
-    var chat = new FirechatUI(chatRef, document.getElementById('firechat-wrapper'));
-    chat.setUser(authData.uid, authData[authData.provider].displayName);
-  }
-});
-function login(provider) {
-  chatRef.authWithOAuthPopup(provider, function(error, authData) {
-  //chatRef.authAnonymously(function(error, authData) {
-    console.log(authData);
-    if (error) {
-      console.log(error);
-    }
-  });
-}
