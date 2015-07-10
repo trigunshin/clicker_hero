@@ -36,3 +36,19 @@ $("#idlemode").change(function() {
     $("#nonidle").slideDown();
   }
 });
+
+// tryhard functioning
+function hide_flash() {
+  $("#flash_container").css('visibility', 'hidden');
+  toggle_flash = show_flash;
+}
+function show_flash() {
+  $("#flash_container").css('visibility', 'visible');
+  toggle_flash = hide_flash;
+}
+var toggle_flash = hide_flash;
+function toggle_flash_fn() {
+  toggle_flash();
+}
+
+$("button#flash_visibility_toggle").click(toggle_flash_fn);
