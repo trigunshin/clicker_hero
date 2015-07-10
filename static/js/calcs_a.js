@@ -1,15 +1,7 @@
+var loadSpinner = new Spinner({});
 
-// initialization
 var AbaddonMultiplier = null;
-// used in Import as well as each Compute() method
-var GildedHeroes = [0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0,
-                    0, 0, 0, 0,
-                    0, 0, 0, 0, 0
-                    ];
+
 var Achievements = {
   "13": 1, // hoard
   "14": 2, // hoard
@@ -30,6 +22,9 @@ var Achievements = {
   "45": 0, // ascend 5
   "46": 0, // ascend 10
   "59": 0, // ascend 25
+  "91": 0, // ascend 50
+  "92": 0, // ascend 100
+  "93": 0, // ascend 250
   "21": 1, // boss
   "22": 2, // boss
   "23": 3, // boss
@@ -65,88 +60,13 @@ var Upgrades = {
   "122": 25,
   "126": 25,
 };
-var Ancients = {
-  solomon: {name: "Solomon, Ancient of Wisdom", desc: "+5% to 1% Primal hero souls", power: 1.5, id: 3},
-  libertas: {name: "Libertas, Ancient of Freedom", desc: "+25% to +15% idle Gold", power: 1, id: 4},
-  siyalatas: {name: "Siyalatas, Ancient of Abandon", desc: "+25% to +15% idle DPS", power: 1, id: 5},
-  khrysos: {name: "Khrysos, Ancient of Inheritance", desc: "+50 starting Gold when Ascending", power: 1.5, maxlvl: 10, id: 6},
-  // thusia
-  mammon: {name: "Mammon, Ancient of Greed", desc: "+5% Gold", power: 1, id: 8},
-  mimzee: {name: "Mimzee, Ancient of Riches", desc: "+50% treasure chest Gold", power: 1, id: 9},
-  pluto: {name: "Pluto, Ancient of Wealth", desc: "+30% Golden Clicks Gold", power: 1, id: 10},
-  dogcog: {name: "Dogcog, Ancient of Thrift", desc: "-2% hero cost", power: 1, maxlvl: 25, id: 11},
-  fortuna: {name: "Fortuna, Ancient of Chance", desc: "+0.25% chance of 10x Gold", power: 1, maxlvl: 40, id: 12},
-  atman: {name: "Atman, Ancient of Souls", desc: "+1% primal boss chance", power: 1.5, maxlvl: 25, id: 13},
-  dora: {name: "Dora, Ancient of Discovery", desc: "+20% more Treasure Chests", power: 1, maxlvl: 50, id: 14},
-  bhaal: {name: "Bhaal, Ancient of Murder", desc: "+15% critical damage", power: 1, id: 15},
-  morgulis: {name: "Morgulis, Ancient of Death", desc: "+11% DPS per Hero Soul Spent (cumulative)", power: 0, id: 16},
-  // chronos
-  bubos: {name: "Bubos, Ancient of Diseases", desc: "-2% boss life", power: 1, maxlvl: 25, id: 18},
-  fragsworth: {name: "Fragsworth, Ancient of Wrath", desc: "+20% click damage", power: 1, id: 19},
-  // vaagur
-  kumawakamaru: {name: "Kumawakamaru, Ancient of Shadows", desc: "-1 monsters to advance", power: 1, maxlvl: 5, id: 21},
-  chawedo: {name: "Chawedo, Ancient of Agitation", desc: "+2s Clickstorm duration", power: 1, maxlvl: 30, id: 22},
-  hecatoncheir: {name: "Hecatoncheir, Ancient of Wallops", desc: "+2s Super Clicks duration", power: 1, maxlvl: 30, id: 23},
-  berserker: {name: "Berserker, Ancient of Rage", desc: "+2s Powersurge duration", power: 1, maxlvl: 30, id: 24},
-  sniperino: {name: "Sniperino, Ancient of Accuracy", desc: "+2s Lucky Strikes duration", power: 1, maxlvl: 30, id: 25},
-  kleptos: {name: "Kleptos, Ancient of Thieves", desc: "+2s Golden Clicks duration", power: 1, maxlvl: 30, id: 26},
-  energon: {name: "Energon, Ancient of Battery Life", desc: "+2s Metal Detector duration", power: 1, maxlvl: 30, id: 27},
-  argaiv: {name: "Argaiv, Ancient of Enhancement", desc: "+2% Gilded bonus (per Gild)", power: 1, id: 28},
-  juggernaut: {name: "Juggernaut, Ancient of Momentum", desc: "+0.01% DPS per click combo (active clicking)", power: 1.5, id: 29},
-  iris: {name: "Iris, Ancient of Vision", desc: "+1 to starting zone after Ascension", power: 1.5, id: 30},
-};
 var AncientMin = 3;
-var AncientMax = 30;
+var AncientMax = 31;
 
 var AchievementMultiplier = 1;
 var ToPurchase = [1,2,4,8,16,35,70,125,250,500,800,1200,1700,2200,2750,3400,4100,5000,6000,7500,10000,12500,16000,25000,35000,50000,70000,100000,150000,250000,400000];
 var Seed = null;
 var OwnedNotInList = 1;
-
-var ancientList = [];
-for (var k in Ancients) {
-  if (Ancients.hasOwnProperty(k)) {
-    ancientList.push(k);
-  }
-}
-ancientList.sort();
-
-
-// set up ancient templating
-var ancient_row_template = _.template(
-    $("script#ancient_row_template").html()
-);
-
-for (var i = 0; i < ancientList.length; i++) {
-  var key = ancientList[i];
-  var ancient_display_name = Ancients[key].name.split(", ")[0];
-
-  var ancient_data = {
-    name: ancient_display_name,
-    display_name: ancient_display_name,
-    description: Ancients[key].desc,
-    checked: true
-  };
-  $("#ancient_table_body").append(ancient_row_template(ancient_data));
-  Ancients[key].used=$("#"+ancient_display_name+"_used");
-  Ancients[key].level=$("#"+ancient_display_name+"_level");
-  Ancients[key].target=$("#"+ancient_display_name+"_target");
-  Ancients[key].data_row=$("#"+ancient_display_name+"_data_row");
-}
-
-var ANTI_CHEAT_CODE = "Fe12NAfA3R6z4k0z";
-var SALT = "af0ik392jrmt0nsfdghy0";
-
-var curAddAncients = null;
-var curLevels = null;
-var curUsed = null;
-var curSouls = null;
-var curActivity = null;
-var curOutFactor = null;
-var computeThread = null;
-
-// functions
-
 function Random(a, b) {
   Seed = (Seed * 16807) % 2147483647;
   return (Seed % (b - a)) + a;
@@ -157,6 +77,7 @@ function RandRoll(cnt) {
   }
 }
 function GetAncientsList(levels, first) {
+  var SaveSeed = Seed;
   var remains = [];
   for (var i = AncientMin; i <= AncientMax; i++) {
     if (!levels[i]) {
@@ -176,7 +97,20 @@ function GetAncientsList(levels, first) {
       count++;
     }
   }
+  Seed = SaveSeed;
   return out;
+}
+function GetGildedHeroes() {
+  var gildedHeroes = new Array(Heroes.length);
+  for (var i = 0; i < Heroes.length; i++) {
+    Heroes[i].gilded = parseInt(Heroes[i].gildBox.text());
+    gildedHeroes[i] = Heroes[i].gilded;
+    if (!gildedHeroes[i]) {
+      Heroes[i].gilded = 0;
+      gildedHeroes[i] = 0;
+    }
+  }
+  return gildedHeroes;
 }
 function SetDifference(a, b) {
   var cnt = 0;
@@ -228,46 +162,69 @@ function UpdateAncientPrices(levels, didGetVaagur) {
   }
 }
 
-// Given a jquery selector, parse out the text string and return the data
-var get_save_data = function(save_data_selector) {
-  var save_txt = $(save_data_selector).val();
-  if (save_txt.search(ANTI_CHEAT_CODE) != -1) {
-    var result = save_txt.split(ANTI_CHEAT_CODE);
-    save_txt = "";
-    for (var i = 0; i < result[0].length; i += 2) {
-      save_txt += result[0][i];
-    }
-    if (CryptoJS.MD5(save_txt + SALT) != result[1]) {
-      alert("Bad hash");
-      return false;
-    }
+var ancientList = [];
+for (var k in Ancients) {
+  if (Ancients.hasOwnProperty(k)) {
+    ancientList.push(k);
   }
-  return $.parseJSON(atob(save_txt));
+}
+ancientList.sort();
+for (var i = 0; i < ancientList.length; i++) {
+  var key = ancientList[i];
+  var tr = Ancients[key].targetBox = $("<tr></tr>");
+  Ancients[key].used = $("<input></input>").attr("type", "checkbox").attr("title", "Optimize this ancient").addClass("chkAncient");
+  Ancients[key].used.prop("checked", true);
+  tr.append($("<td></td>").append(Ancients[key].used).append($("<span></span>").text(Ancients[key].name).attr("title", Ancients[key].desc)));
+  Ancients[key].level = $("<span></span>").addClass('span2').attr("type", "text").text(0);
+  Ancients[key].target = $("<span></span>").addClass('span2');
+  tr.append($("<td></td>").append(Ancients[key].level)).append($("<td></td>").append(Ancients[key].target));
+  $("#ancienttbl").append(tr);
 }
 
-var ImportClick = function() {
-  var data = get_save_data("#savedata");
-  if(!data) return;
-  Import(data);
-};
-
-function Import(save_data) {
-  var heroes = save_data.heroCollection.heroes;
-  var ascSouls = 0;
-  for (var k = 0; k < GildedHeroes.length; k++) {
-    GildedHeroes[k] = 0;
+for (var i = 0; i < Heroes.length; i++) {
+  var tr = $("<tr></tr>").attr("id", "hero" + i.toString());
+  var used = $("<input></input>").attr("type", "checkbox").attr("title", "Optimize this hero").addClass("chkHero");
+  if (Heroes[i].name == "The Masked Samurai" || i > 24) {
+    //Automatically selected Samurai and the Rangers
+    used.prop('checked', true);
   }
+  tr.append($("<td></td>").append(used).append(Heroes[i].name));
+  Heroes[i].gildBox = $("<span></span>").attr("type", "text").text(0);
+  tr.append($("<td></td>").append(Heroes[i].gildBox));
+  tr.append($("<td></td>").attr("class", "heroEff"));
+  $("#heroestbl").append(tr);
+}
+
+const ANTI_CHEAT_CODE = "Fe12NAfA3R6z4k0z";
+const SALT = "af0ik392jrmt0nsfdghy0";
+function Import() {
+  var txt = $("#savedata").val();
+  if (txt.search(ANTI_CHEAT_CODE) != -1) {
+    var result = txt.split(ANTI_CHEAT_CODE);
+    txt = "";
+    for (var i = 0; i < result[0].length; i += 2) {
+      txt += result[0][i];
+    }
+    if (CryptoJS.MD5(txt + SALT) != result[1]) {
+      alert("Bad hash");
+      return;
+    }
+  }
+  var data = $.parseJSON(atob(txt));
+
+  var heroes = data.heroCollection.heroes;
+  var ascSouls = 0;
   for (var k in heroes) {
     var id = parseInt(k);
     ascSouls += heroes[k].level;
     if (id < 2 || id > 35) continue;
-    GildedHeroes[id - 2] = heroes[k].epicLevel;
+  Heroes[id - 2].gildBox.text(heroes[k].epicLevel);
   }
-  ascSouls = Math.floor(ascSouls / 2000) + save_data.primalSouls;
+  ascSouls = Math.floor(ascSouls / 2000) + data.primalSouls;
 
   var mult = 1;
-  for (var k in save_data.achievements) {
-    if (save_data.achievements[k]) {
+  for (var k in data.achievements) {
+    if (data.achievements[k]) {
       if (Achievements.hasOwnProperty(k)) {
         mult *= 1 + 0.01 * Achievements[k];
       } else {
@@ -276,21 +233,21 @@ function Import(save_data) {
     }
   }
   AchievementMultiplier = mult;
-  for (var k in save_data.upgrades) {
-    if (save_data.upgrades[k] && Upgrades.hasOwnProperty(k)) {
+  for (var k in data.upgrades) {
+    if (data.upgrades[k] && Upgrades.hasOwnProperty(k)) {
       mult *= 1 + 0.01 * Upgrades[k];
     }
   }
   for (var k in Upgrades) {
     AchievementMultiplier *= (1 + 0.01 * Upgrades[k]);
   }
-  AbaddonMultiplier = save_data.allDpsMultiplier / mult;
+  AbaddonMultiplier = data.allDpsMultiplier / mult;
 
-  Seed = save_data.ancients.ancientsRoller.seed;
+  Seed = data.ancients.ancientsRoller.seed;
   var levels = {};
   OwnedNotInList = 0;
-  for (var i = 3; i <= 28; i++) {
-    if (save_data.ancients.ancients.hasOwnProperty(i)) {
+  for (var i = AncientMin; i <= AncientMax; i++) {
+    if (data.ancients.ancients.hasOwnProperty(i)) {
       levels[i] = true;
       OwnedNotInList += 1;
     }
@@ -300,15 +257,15 @@ function Import(save_data) {
       OwnedNotInList -= 1;
     }
   }
-  UpdateAncientPrices(levels, save_data.ancients.didGetVaagur);
+  UpdateAncientPrices(levels, data.ancients.didGetVaagur);
 
-  $("#soulsin").html(save_data.heroSouls + ($("#addsouls").prop("checked") ? ascSouls : 0));
+  $("#soulsin").text(data.heroSouls + ($("#addsouls").prop("checked") ? ascSouls : 0));
   for (var k in Ancients) {
     if (Ancients.hasOwnProperty(k)) {
-      if (save_data.ancients.ancients[Ancients[k].id]) {
-        Ancients[k].level.html(save_data.ancients.ancients[Ancients[k].id].level);
+      if (data.ancients.ancients[Ancients[k].id]) {
+        Ancients[k].level.text(data.ancients.ancients[Ancients[k].id].level);
       } else {
-        Ancients[k].level.html(0);
+        Ancients[k].level.text(0);
       }
     }
   }
@@ -343,14 +300,10 @@ function FormatTime(sec) {
   }
 }
 
-function AncientPrice(ancient, level) {
-  var price = Math.round(Math.pow(level, Ancients[ancient].power));
-  if (ancient == "kumawakamaru") {
-    price *= 10;
-  }
-  return price;
-}
+var curAddAncients = null;
+var curOutFactor = null;
 
+var computeThread = null;
 function onAddAncient(e) {
   var ancient = e.data.ancient;
   var ratio = e.data.outFactor.ratio;
@@ -375,41 +328,72 @@ function onAddAncient(e) {
     curAddAncients[newPos] = tmp;
     pos = newPos;
   }
-  $("#add" + ancient).text("(" + Math.round(ratio * 3600) + " souls/hour, " +
+  $("#add" + ancient).text("(" +
     FormatFactor(ratio / curOutFactor) + " increase).");
 }
+function onSwitchGilds(e) {
+  var hero = e.data.hero;
+  var ratio = e.data.outFactor.ratio;
+  var factor = FormatFactor(ratio / curOutFactor);
+  
+  //Find current best efficiency
+  var currentEff = $("#heroestbl .heroEff").map(function() {
+    var html = $(this).html();
+    var result = parseFloat(html);
+    return isNaN(result) ? null : result;
+  }).get();
+  var maxEff = Math.max.apply(Math, currentEff);
+  
+  //Check if current hero is better the previous best
+  if (parseFloat(factor) > 0 && (maxEff == null || parseFloat(factor) >= maxEff)) {
+    //Highlight if best
+    $("#heroestbl .hilite").removeClass("hilite");
+    $("#hero" + hero.toString()).addClass("hilite");
+  }
+  
+  $("#hero" + hero.toString() + " .heroEff").text(factor);
+}
 function onFinishCompute(e) {
-  if (e.data.ancient) {
+  if (e.data.ancient != null) {
     return onAddAncient(e);
   }
+  if (e.data.hero != null) {
+  return onSwitchGilds(e);
+  }
+
   var levels = e.data.levels;
   var outFactor = e.data.outFactor;
   var initFactor = e.data.initFactor;
   var souls = e.data.souls;
+  if (!e.data.working) {
+    curOutFactor = outFactor.ratio;
+  }
 
   var soulsSpent = 0;
   for (var k in Ancients) {
-    var level = parseInt(Ancients[k].level.html(), 10);
+    var level = parseInt(Ancients[k].level.text());
     for (var lvl = 2; lvl <= level; lvl++) {
       soulsSpent += AncientPrice(k, lvl);
     }
   }
 
+  if (!e.data.working) {
+    loadSpinner.stop();
+  }
+
+  $("#soulsout").text(souls);
   for (var k in Ancients) {
     if (Ancients.hasOwnProperty(k)) {
-      var oldLevel = parseInt(Ancients[k].level.html());
+      var oldLevel = parseInt(Ancients[k].level.text());
       if (levels[k] > oldLevel) {
-        Ancients[k].data_row.addClass("success");
+        Ancients[k].targetBox.addClass("hilite");
         Ancients[k].target.html(levels[k] + " (+" + (levels[k] - oldLevel) + ")");
       } else {
-        Ancients[k].data_row.removeClass("success");
+        Ancients[k].targetBox.removeClass("hilite");
         Ancients[k].target.html(levels[k] ? levels[k] : "");
       }
     }
   }
-  var soul_diff = parseInt($("#soulsin").html(), 10) - souls;
-  $("#soulsout").html(souls+" (-"+soul_diff+")");
-
   var outLog = "";
   outLog += "Souls/hour: " + Math.round(outFactor.ratio * 3600) + "<br/>\n";
   outLog += "Optimal level: " + outFactor.level + ", souls: " + Math.round(outFactor.souls) + ", time: " + FormatTime(outFactor.time) + "<br/>\n";
@@ -418,46 +402,89 @@ function onFinishCompute(e) {
     outLog += "Current DR multiplier: " + AbaddonMultiplier.toFixed(3) + " (~" + Math.round(Math.log(AbaddonMultiplier) / Math.log(1.1)) + " uses)<br/>\n";
   }
   outLog += "Souls spent on ancient levels: " + soulsSpent + "<br/>\n";
-  if (!e.data.working) {
-    outLog += "<div id=\"addancients\"></div>\n";
-  }
-  $("#output").html(outLog);
-  if (!e.data.working) {
-    curOutFactor = outFactor.ratio;
-    curAddAncients = [];
-    var addList = $("#addancients");
-    for (var k in Ancients) {
-      if (!levels[k] && Ancients[k].price <= curSouls && Ancients[k].used.prop("checked")) {
-        var curItem = {ancient: k};
-        curItem.line = $("<div></div>").html(
-          "<a href=\"javascript:void(0)\" class=\"buybtn\" aid=\"" + k + "\" title=\"" + Ancients[k].desc + "\">Purchase " +
-          Ancients[k].name + "</a>: " + Ancients[k].price + " souls <span id=\"add" + k + "\">" +
-          "<img src=\"http://www.rivsoft.net/content/ancientloader.gif\"/></span>");
-        curAddAncients.push(curItem);
-      }
-    }
-    curAddAncients.sort(function(a, b) {return Ancients[a.ancient].price - Ancients[b.ancient].price;});
-    for (var i = 0; i < curAddAncients.length; i++) {
-      addList.append(curAddAncients[i].line);
-      var k = curAddAncients[i].ancient;
-      var levels = $.extend({}, curLevels);
-      levels[k] = 1;
 
-      computeThread.postMessage({cmd: "Compute", levels: levels, souls: curSouls - Ancients[k].price,
-        gilded: GildedHeroes, activity: curActivity, damageFactor: AchievementMultiplier, ancient: k, used: curUsed});
-    }
-    curLevels = null;
-    curSouls = null;
-    curActivity = null;
-    curUsed = null;
-    $(".buybtn").click(function() {
-      var aid = $(this).attr("aid");
-      Ancients[aid].level.val(1);
-      $("#soulsin").html(parseInt($("#soulsin").html()) - Ancients[aid].price);
-      StartCompute();
-    });
-  }
+  $("#output").html(outLog);
 };
+
+function ShowLevelingPlan(levels) {
+  if ($('#levelingPlanItem').is(':hidden')) {
+    return;
+  }
+  var plan = new LevelingPlan(levels.argaiv, AchievementMultiplier);
+  plan.Start(levels.argaiv, levels.dogcog);
+  
+  for (var i = 0; i < plan.plan.length; i++) {
+    var step = plan.plan[i];
+    var heroName = step.heroName;
+    var level = step.level;
+    
+    if (plan.plan.length > i + 1 && plan.plan[i+1].heroName == heroName)
+      continue;
+    
+    var tr = $("<tr></tr>");
+    tr.append($("<td></td>").append(heroName));
+    tr.append($("<td></td>").append(level.toString()));
+    $("#plantbl").append(tr);
+  }
+}
+
+function ShowNewAncients(levels, souls, activity, used) {
+  curAddAncients = [];
+  var addList = $("#addancients");
+  addList.empty();
+  for (var k in Ancients) {
+    if (!levels[k] && Ancients[k].price <= souls && Ancients[k].used.prop("checked")) {
+      var curItem = {ancient: k};
+      curItem.line = $("<div></div>").html(
+        "<a href=\"javascript:void(0)\" class=\"buybtn\" aid=\"" + k + "\" title=\"" + Ancients[k].desc + "\">" +
+      Ancients[k].name + "</a>: " + Ancients[k].price + " souls <span id=\"add" + k + "\">" +
+        "<img src=\"//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif\"/></span>");
+      curAddAncients.push(curItem);
+    }
+  }
+  curAddAncients.sort(function(a, b) {return Ancients[a.ancient].price - Ancients[b.ancient].price;});
+  for (var i = 0; i < curAddAncients.length; i++) {
+    addList.append(curAddAncients[i].line);
+    var k = curAddAncients[i].ancient;
+    var newLevels = $.extend({}, levels);
+    newLevels[k] = 1;
+    computeThread.postMessage({cmd: "Compute", levels: newLevels, souls: souls - Ancients[k].price,
+      gilded: GetGildedHeroes(), activity: activity, damageFactor: AchievementMultiplier, ancient: k, used: used});
+  }
+  $(".buybtn").click(function() {
+    var aid = $(this).attr("aid");
+    Ancients[aid].level.text(1);
+    $("#soulsin").text(parseInt($("#soulsin").text()) - Ancients[aid].price);
+    StartCompute();
+  });
+}
+
+function ShowRegilds(levels, souls, activity, used) {
+  var gilds = GetGildedHeroes();
+  var blankGilds = new Array(gilds.length);
+  var totalGilds = 0;
+  for (var i = 0; i < gilds.length; i++) {
+    totalGilds += gilds[i];
+    blankGilds[i] = 0;
+  }
+  for (var i = 0; i < Heroes.length; i++) {
+    var newGilds = blankGilds.slice(0);
+    newGilds[i] = totalGilds;
+    
+    $("#hero" + i.toString()).removeClass("hilite");
+    
+    if ($("#hero" + i.toString() + " :checkbox").prop('checked') == false) {
+      $("#hero" + i.toString() + " .heroEff").html('');
+    } else if (souls - (totalGilds - gilds[i]) * 80 > 0) {
+      $("#hero" + i.toString() + " .heroEff").html("<img src=\"//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif\"/>")
+      
+      computeThread.postMessage({cmd: "Compute", levels: levels, souls: souls - (totalGilds - gilds[i]) * 80,
+        gilded: newGilds, activity: activity, damageFactor: AchievementMultiplier, hero: i, used: used});
+    } else {
+      $("#hero" + i.toString() + " .heroEff").html('N/A');
+    }
+  }
+}
 
 function StartCompute() {
   var levels = {};
@@ -465,7 +492,7 @@ function StartCompute() {
   var owned = OwnedNotInList;
   for (var k in Ancients) {
     if (Ancients.hasOwnProperty(k)) {
-      levels[k] = parseInt(Ancients[k].level.html());
+      levels[k] = parseInt(Ancients[k].level.text());
       if (levels[k]) {
         owned++;
       }
@@ -474,13 +501,11 @@ function StartCompute() {
       }
     }
   }
-  var souls = parseInt($("#soulsin").html());
+  var souls = parseInt($("#soulsin").text());
 
   if (computeThread) {
     computeThread.terminate();
   }
-  curAddAncients = null;
-  //computeThread = new Worker("ancientsworker.js");
   computeThread = new Worker("static/js/ancientsworker10.js");
   computeThread.onmessage = onFinishCompute;
 
@@ -505,13 +530,19 @@ function StartCompute() {
     activity.none = parseFloat($("#cdnonecps").val());
   }
 
+  loadSpinner.spin($("#ancienttbl")[0]);
+
   $("#output").empty();
 
-  curLevels = levels;
-  curSouls = souls;
-  curActivity = activity;
-  curUsed = used;
-
-  computeThread.postMessage({cmd: "Compute", levels: levels, souls: souls, gilded: GildedHeroes, activity: activity,
+  computeThread.postMessage({cmd: "Compute", levels: levels, souls: souls, gilded: GetGildedHeroes(), activity: activity,
     damageFactor: AchievementMultiplier, used: used});
+  
+  ShowNewAncients(levels, souls, activity, used);
+  ShowRegilds(levels, souls, activity, used);
+  ShowLevelingPlan(levels);
 }
+$(function() {
+  if (window.location.toString().indexOf('debug') > 0) {
+    $('#levelingPlanItem').show();
+  }
+});

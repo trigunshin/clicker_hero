@@ -22,6 +22,12 @@ $('#calc_template_anchor').after(calc_template(calc_template_data));
 var calc_config_template_data = {};
 $('#calc_config_anchor').after(calc_config_template(calc_config_template_data));
 
+var hero_template = _.template(
+    $("script#hero_area_template").html()
+);
+var hero_template_data = {};
+$('#hero_template_anchor').after(hero_template(hero_template_data));
+
 // set up on-click for game reload button
 $('#reload_flash').click(function() {
      var clone = $('#flashContent object').clone();
