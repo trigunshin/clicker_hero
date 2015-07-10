@@ -26,7 +26,7 @@
                 <div id='calc_template_anchor'></div>
             </div>
             <div id="hero_calc_tab" class="tab-pane">
-                <p>Hero calc will go here someday.</p>
+                <div id="hero_template_anchor"></div>
             </div>
             <div id="chat_tab" class="tab-pane">
                 <iframe frameborder="0"
@@ -42,7 +42,7 @@
         <div id='calc_config_template_section' class='span5'>
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#ancient_calc_tab" data-toggle="tab">Ancients</a></li>
-                <li><a href="#hero_calc_tab" data-toggle="tab">Heroes (TODO)</a></li>
+                <li><a href="#hero_calc_tab" data-toggle="tab">Heroes</a></li>
                 <li><a href="#chat_tab" data-toggle="tab">Jayeeyee Chat</a></li>
             </ul>
             <div id='calc_config_anchor'></div>
@@ -57,7 +57,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
 
 <!-- templates -->
@@ -104,16 +104,19 @@
     <div class='row'>
         <div id="output" class='span6'>
         </div>
+        <div id='addancients' class='span6'>Please import a save for suggestions
+        </div>
     </div>
 </script>
 <script id="calc_config_template" type="text/template" class="template">
     <div>
         <input id="savedata" class='span1' onfocus="this.select()" onmouseup="return false" type='text'></input>
-        <input type="button" class='span2' value="Import" onclick="ImportClick()"></input>
+        <input type="button" class='span2' value="Import" onclick="Import()"></input>
         <br>
         <div>
             <button id="reload_flash" class="btn btn-large btn-inverse">Reload Game</button>
             <button class='btn btn-large' onclick="StartCompute()">Rerun Calcs</button>
+            <button id='flash_visibility_toggle' class='btn btn-large' >Toggle Visibility</button>
         </div>
     </div>
     <div class='row'>
@@ -169,8 +172,20 @@
         </td>
     </tr>
 </script>
+<script id="hero_area_template" type="text/template" class="template">
+<div role="tabpanel" class="tab-pane" id="heroes">
+  <div class="panel-heading">
+    Efficiency indicates switching all gilds to the indicated hero, and includes the 80 souls lost for each regild.<br />
+    Tinkering with gilds will not automatically account for the souls lost to regilding.
+  </div>
+  <table id="heroestbl" class="table table-condensed">
+    <tr><th><input type="checkbox" onclick="$('.chkHero').prop('checked', this.checked);" title="Select all heroes" />Hero</th><th>Gilds</th><th>Efficiency</th></tr>
+  </table>
+</div>
+</script>
 <script id="calc_area_template" type="text/template" class="template">
-    <table id="ancient_table" class='table table-condensed'>
+    <div>Thanks to <a href="https://www.reddit.com/user/rler">rler</a> for the calculations.</div>
+    <table id="ancienttbl" class='table table-condensed'>
         <thead>
             <tr>
                 <th><p class='span1'>Ancient</p></th>
@@ -193,13 +208,10 @@
 </script>
 
 <!-- Requires jquery -->
-<script src='https://cdn.firebase.com/js/client/2.0.2/firebase.js'></script>
-<!-- Firechat -->
-<link rel='stylesheet' href='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.css' />
-<script src='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.js'></script>
-
 <!-- Load init scripts last -->
-<script src="static/js/init_a.js"></script>
+<script language="javascript" src="static/js/init_a.js"></script>
+<script language="javascript" src="static/js/shared.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js"></script>
 <script language="javascript" src='static/js/calcs_a.js'></script>
 <link rel="stylesheet" type="text/css" href="static/css/calc_a_styles.css">
 
