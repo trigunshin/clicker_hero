@@ -10,7 +10,7 @@ var game_template_data = {
 };
 $('#game_template_anchor').after(game_template(game_template_data));
 
-// calculator render
+// load rler ancient's calc and output area
 var calc_config_template = _.template(
     $("script#calc_config_template").html()
 );
@@ -22,11 +22,16 @@ $('#calc_template_anchor').after(calc_template(calc_template_data));
 var calc_config_template_data = {};
 $('#calc_config_anchor').after(calc_config_template(calc_config_template_data));
 
+// load hero tab
 var hero_template = _.template(
     $("script#hero_area_template").html()
 );
 var hero_template_data = {};
 $('#hero_template_anchor').after(hero_template(hero_template_data));
+
+// load chat tab
+var chat_template = _.template($("script#chat_template").html());
+$('#chat_template_anchor').append(chat_template());
 
 // set up on-click for game reload button
 $('#reload_flash').click(function() {

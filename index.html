@@ -29,13 +29,7 @@
                 <div id="hero_template_anchor"></div>
             </div>
             <div id="chat_tab" class="tab-pane">
-                <iframe frameborder="0"
-                    scrolling="no"
-                    id="chat_embed"
-                    src="http://www.twitch.tv/jayeeyee/chat"
-                    height="1000"
-                    width="100%">
-                </iframe>
+                <div id="chat_template_anchor"></div>
             </div>
         </div>
         <!-- calculator config area -->
@@ -195,16 +189,25 @@
         </thead>
         <tbody id="ancient_table_body">
             <tr>
-                <td><p class='span1'>Hero Souls</p></td>
+                <td><span class='span1'>Hero Souls</span></td>
                 <td>
-                    <p class='span2' id="soulsin">0</p>
+                    <span class='span2' id="soulsin">0</pan>
                 </td>
                 <td>
-                    <p class='span2' id="soulsout">0</p>
+                    <span class='span2' id="soulsout">0</span>
                 </td>
             </tr>
         </tbody>
     </table>
+</script>
+<script id="chat_template" type="text/template" class="template">
+    <iframe frameborder="0"
+        scrolling="no"
+        id="chat_embed"
+        src="http://www.twitch.tv/jayeeyee/chat"
+        height="1000"
+        width="100%">
+    </iframe>
 </script>
 
 <!-- Requires jquery -->
