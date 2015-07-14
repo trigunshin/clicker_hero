@@ -1,23 +1,6 @@
 var loadSpinner = new Spinner({});
 
 var AbaddonMultiplier = null;
-
-var Upgrades = {
-  "12": 25,
-  "25": 20,
-  "26": 20,
-  "27": 20,
-  "28": 20,
-  "36": 25,
-  "57": 25,
-  "82": 20,
-  "83": 20,
-  "87": 10,
-  "97": 10,
-  "120": 25,
-  "122": 25,
-  "126": 25,
-};
 var AncientMin = 3;
 var AncientMax = 31;
 
