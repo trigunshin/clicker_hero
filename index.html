@@ -1,155 +1,181 @@
 <!doctype html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="en">
-<!--<![endif]-->
+<html lang="en" ng-app='clickerCalcApp'>
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Single Page Clicker Hero Calculator</title>
+    <meta charset="utf-8">
+    <title>CH Unicalc</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.js"></script>
+    
+    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
 </head>
-<body>
-<!--
-    $('#flash_container').css("left","-2000px");
-    $('#flash_container').css("left","0px");
-    or
-    $('#flash_container').animate({ left: "-2000px"},1000);
-    $('#flash_container').animate({ left: "0"},1000);
--->
-<div id="container">
-    <div id="clicker_container" class="row tabbale">
-        <!-- calculator area -->
-        <div id='calc_template_section' class='span7 tab-content'>
-            <div id="ancient_calc_tab" class='tab-pane active'>
-                <div id='calc_template_anchor'></div>
+<body ng-controller="ClickerCalcCtrl">
+    <div id="container-fluid">
+        <div id="clicker_container" class="row">
+            <div class="tab-content col-md-4">
+                <div role="tabpanel" class="tab-pane" id="ancients">
+                    <div>Thanks to <a href="https://www.reddit.com/user/rler">rler</a> for the calculations.</div>
+                    <table id="ancienttbl" class='table table-condensed'>
+                        <thead>
+                            <tr>
+                                <th><span>Ancient</span></th>
+                                <th><span>Current</span></th>
+                                <th><span>Target</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="ancient_table_body">
+                            <tr>
+                                <td><span>Hero Souls</span></td>
+                                <td><span id="soulsin">0</span></td>
+                                <td><span id="soulsout">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="heroes">
+                    <div role="tabpanel" class="tab-pane" id="heroes">
+                      <div class="panel-heading">
+                        Efficiency indicates switching all gilds to the indicated hero, and includes the 80 souls lost for each regild.<br />
+                        Tinkering with gilds will not automatically account for the souls lost to regilding.
+                      </div>
+                      <table id="heroestbl" class="table table-condensed">
+                        <tr><th><input type="checkbox" onclick="$('.chkHero').prop('checked', this.checked);" title="Select all heroes" />Hero</th><th>Gilds</th><th>Efficiency</th></tr>
+                      </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="jayeeyeechat"></div>
+                <div role="tabpanel" class="tab-pane active" id="ancients_thumb">
+                    <table id="thumb_ancient_tbl" class='table table-condensed'>
+                        <thead>
+                            <tr>
+                                <th><span>Ancient</span></th>
+                                <th><span>Current</span></th>
+                                <th><span>Target</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="ancient_table_body">
+                            <tr ng-repeat="name in known_ancients_names|orderBy" 
+                            ng-class="ancient_data_by_id[known_ancients[name].id].thumb.current < ancient_data_by_id[known_ancients[name].id].thumb.target ? 'success' : ''">
+                                <td><span>{{ ancient_data_by_id[known_ancients[name].id].name }}</span></td>
+                                <td><span>{{ ancient_data_by_id[known_ancients[name].id].thumb.current }}</pan></td>
+                                <td><span>{{ ancient_data_by_id[known_ancients[name].id].thumb.target }}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div id="hero_calc_tab" class="tab-pane">
-                <div id="hero_template_anchor"></div>
-            </div>
-            <div id="chat_tab" class="tab-pane">
-                <div id="chat_template_anchor"></div>
-            </div>
-        </div>
-        <!-- calculator config area -->
-        <div id='calc_config_template_section' class='span5'>
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#ancient_calc_tab" data-toggle="tab">Ancients</a></li>
-                <li><a href="#hero_calc_tab" data-toggle="tab">Heroes</a></li>
-                <li><a href="#chat_tab" data-toggle="tab">Jayeeyee Chat</a></li>
-            </ul>
-            <div id='calc_config_anchor'></div>
-            <!-- game area -->
-            <div id='game_template_section'>
-                <div id='game_template_anchor'></div>
+
+            <!-- calculator config area -->
+            <div id='calc_config_template_section' class='col-md-5'>
+                <ul class='nav nav-tabs'>
+                    <li role="presentation" class="active"><a href="#ancients_thumb" aria-controls="ancients_thumb" role="tab" data-toggle="tab">Thumb Ancients</a></li>
+                    <li role="presentation"><a href="#jayeeyeechat" aria-controls="jayeeyeechat" role="tab" data-toggle="tab">Jayeeyee Chat</a></li>
+                    <li role="presentation" class=""><a href="#ancients" aria-controls="ancients" role="tab" data-toggle="tab">.17 Ancients Calc</a></li>
+                    <li role="presentation"><a href="#heroes" aria-controls="heroes" role="tab" data-toggle="tab">Hero Gilds</a></li>
+                </ul>
+                <div id='calc_config_anchor'>
+                    <div>
+                        <input id="savedata" class='span1' onfocus="this.select()" onmouseup="return false" type='text' ng-model="save_data"></input>
+                        <input type="button" class='span2' value="Import" ng-click="import(save_data)"></input>
+                        <br>
+                        <div>
+                            <button id="reload_flash" class="btn btn-large btn-inverse" ng-click="reload_game();">Reload Game</button>
+                            <button class='btn btn-large'>(TODO)Rerun Calcs</button>
+                            <button id='flash_visibility_toggle' class='btn btn-large' ng-click="toggle_game()">Toggle Visibility</button>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col-md-2'>
+                            <label><input type="checkbox" id="idlemode" ng-model="idle_mode" ng-change="idle_change()"></input>Idle mode</label>
+                            <div id="nonidle" style="display: none">
+                                <table border="0">
+                                    <tr><th>Cooldown usage:</th><th>Uses/30 min</th><th>Clicks/sec</th></tr>
+                                    <tr>
+                                        <td>Full (1+2+3+4+5+7):</td>
+                                       <td><input type="text" id="cdfullnum" value="2"></input></td>
+                                       <td><input type="text" id="cdfullcps" value="40"></input></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Half (1+2+3+4):</td>
+                                        <td><input type="text" id="cdhalfnum" value="1"></input></td>
+                                        <td><input type="text" id="cdhalfcps" value="40"></input></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Short (1+2):</td>
+                                        <td><input type="text" id="cdshortnum" value="4"></input></td>
+                                        <td><input type="text" id="cdshortcps" value="40"></input></td>
+                                    </tr>
+                                    <tr>
+                                        <td>None:</td>
+                                        <td></td>
+                                        <td><input type="text" id="cdnonecps" value="40"></input></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class='col-md-3'>
+                            <label><input type="checkbox" id="suggestbuy" checked="checked"></input>Suggest ancients</label>
+                        </div>
+                        <div class='col-md-5'>
+                            <label><input type="checkbox" id="addsouls" checked="checked"></input>Include souls gained after ascension</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- game area -->
+                <div id='game_template_section'>
+                    <div id="flash_div_container" style="width:{{ game_data.width }}px; height:{{ game_data.height }}px; overflow:hidden;">
+                    <div id="flash_container" style="width:{{ game_data.width }}px; height:{{ game_data.height }}px; position:relative; left:0px; top:0px;">
+                        <span id="flashContent">
+                            <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="{{ game_data.width }}" height="{{ game_data.height }}" id="https://d1snsxh2hr65cz.cloudfront.net/ClickerHeroes_v{{ game_data.ch_version }}.swf" align="middle">
+                                <param name="movie" value="https://d1snsxh2hr65cz.cloudfront.net/ClickerHeroes_v{{ game_data.ch_version }}.swf" />
+                                <param name="quality" value="high" />
+                                <param name="bgcolor" value="#222222" />
+                                <param name="play" value="true" />
+                                <param name="loop" value="true" />
+
+                                <param name="scale" value="showall" />
+                                <param name="menu" value="true" />
+                                <param name="devicefont" value="false" />
+                                <param name="salign" value="" />
+                                <param name="allowScriptAccess" value="always" />
+                                <!--[if !IE]>-->
+                                <object type="application/x-shockwave-flash" data="https://d1snsxh2hr65cz.cloudfront.net/ClickerHeroes_v{{ game_data.ch_version }}.swf" width="{{ game_data.width }}" height="{{ game_data.height }}">
+                                    <param name="movie" value="https://d1snsxh2hr65cz.cloudfront.net/ClickerHeroes_v{{ game_data.ch_version }}.swf" />
+                                    <param name="quality" value="high" />
+                                    <param name="bgcolor" value="#222222" />
+                                    <param name="play" value="true" />
+                                    <param name="loop" value="true" />
+
+                                    <param name="scale" value="showall" />
+                                    <param name="menu" value="true" />
+                                    <param name="devicefont" value="false" />
+                                    <param name="salign" value="" />
+                                    <param name="allowScriptAccess" value="always" />
+                                <!--<![endif]-->
+                                    <a href="http://www.adobe.com/go/getflash">
+                                        <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+                                    </a>
+                                <!--[if !IE]>-->
+                                </object>
+                                <!--<![endif]-->
+                            </object>
+                        </span>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div id="output" class='cold-md-5'>
+                    </div>
+                    <div id='addancients' class='col-md-5'>Please import a save for suggestions
+                    </div>
+                </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </body>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
-
 <!-- templates -->
-<script id="game_area_template" type="text/template" class="template">
-    <div id="flash_div_container" style="width:<%- rc.width %>px; height:<%- rc.height %>px; overflow:hidden;">
-        <div id="flash_container" style="width:<%- rc.width %>px; height:<%- rc.height %>px; position:relative; left:0px; top:0px;">
-            <span id="flashContent">
-                <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="<%- rc.width %>" height="<%- rc.height %>" id="https://d1snsxh2hr65cz.cloudfront.net/ClickerHeroes_v<%- rc.ch_version %>.swf" align="middle">
-                    <param name="movie" value="https://d1snsxh2hr65cz.cloudfront.net/ClickerHeroes_v<%- rc.ch_version %>.swf" />
-                    <param name="quality" value="high" />
-                    <param name="bgcolor" value="#222222" />
-                    <param name="play" value="true" />
-                    <param name="loop" value="true" />
-
-                    <param name="scale" value="showall" />
-                    <param name="menu" value="true" />
-                    <param name="devicefont" value="false" />
-                    <param name="salign" value="" />
-                    <param name="allowScriptAccess" value="always" />
-                    <!--[if !IE]>-->
-                    <object type="application/x-shockwave-flash" data="https://d1snsxh2hr65cz.cloudfront.net/ClickerHeroes_v<%- rc.ch_version %>.swf" width="<%- rc.width %>" height="<%- rc.height %>">
-                        <param name="movie" value="https://d1snsxh2hr65cz.cloudfront.net/ClickerHeroes_v<%- rc.ch_version %>.swf" />
-                        <param name="quality" value="high" />
-                        <param name="bgcolor" value="#222222" />
-                        <param name="play" value="true" />
-                        <param name="loop" value="true" />
-
-                        <param name="scale" value="showall" />
-                        <param name="menu" value="true" />
-                        <param name="devicefont" value="false" />
-                        <param name="salign" value="" />
-                        <param name="allowScriptAccess" value="always" />
-                    <!--<![endif]-->
-                        <a href="http://www.adobe.com/go/getflash">
-                            <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
-                        </a>
-                    <!--[if !IE]>-->
-                    </object>
-                    <!--<![endif]-->
-                </object>
-            </span>
-        </div>
-    </div>
-    <div class='row'>
-        <div id="output" class='span6'>
-        </div>
-        <div id='addancients' class='span6'>Please import a save for suggestions
-        </div>
-    </div>
-</script>
-<script id="calc_config_template" type="text/template" class="template">
-    <div>
-        <input id="savedata" class='span1' onfocus="this.select()" onmouseup="return false" type='text'></input>
-        <input type="button" class='span2' value="Import" onclick="Import()"></input>
-        <br>
-        <div>
-            <button id="reload_flash" class="btn btn-large btn-inverse">Reload Game</button>
-            <button class='btn btn-large' onclick="StartCompute()">Rerun Calcs</button>
-            <button id='flash_visibility_toggle' class='btn btn-large' >Toggle Visibility</button>
-        </div>
-    </div>
-    <div class='row'>
-        <div class='span1'>
-            <label><input type="checkbox" id="idlemode" checked="checked"></input>Idle mode</label>
-            <div id="nonidle" style="display: none">
-                <table border="0">
-                    <tr><th>Cooldown usage:</th><th>Uses/30 min</th><th>Clicks/sec</th></tr>
-                    <tr>
-                        <td>Full (1+2+3+4+5+7):</td>
-                       <td><input type="text" id="cdfullnum" value="2"></input></td>
-                       <td><input type="text" id="cdfullcps" value="40"></input></td>
-                    </tr>
-                    <tr>
-                        <td>Half (1+2+3+4):</td>
-                        <td><input type="text" id="cdhalfnum" value="1"></input></td>
-                        <td><input type="text" id="cdhalfcps" value="40"></input></td>
-                    </tr>
-                    <tr>
-                        <td>Short (1+2):</td>
-                        <td><input type="text" id="cdshortnum" value="4"></input></td>
-                        <td><input type="text" id="cdshortcps" value="40"></input></td>
-                    </tr>
-                    <tr>
-                        <td>None:</td>
-                        <td></td>
-                        <td><input type="text" id="cdnonecps" value="40"></input></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class='span1'>
-            <label><input type="checkbox" id="suggestbuy" checked="checked"></input>Suggest ancients</label>
-        </div>
-        <div class='span2'>
-            <label><input type="checkbox" id="addsouls" checked="checked"></input>Include souls gained after ascension</label>
-        </div>
-    </div>
-</script>
 <script id="ancient_row_template" type="text/template" class="template">
     <tr id='<%- rc.name %>_data_row'>
         <td>
@@ -166,40 +192,6 @@
         </td>
     </tr>
 </script>
-<script id="hero_area_template" type="text/template" class="template">
-<div role="tabpanel" class="tab-pane" id="heroes">
-  <div class="panel-heading">
-    Efficiency indicates switching all gilds to the indicated hero, and includes the 80 souls lost for each regild.<br />
-    Tinkering with gilds will not automatically account for the souls lost to regilding.
-  </div>
-  <table id="heroestbl" class="table table-condensed">
-    <tr><th><input type="checkbox" onclick="$('.chkHero').prop('checked', this.checked);" title="Select all heroes" />Hero</th><th>Gilds</th><th>Efficiency</th></tr>
-  </table>
-</div>
-</script>
-<script id="calc_area_template" type="text/template" class="template">
-    <div>Thanks to <a href="https://www.reddit.com/user/rler">rler</a> for the calculations.</div>
-    <table id="ancienttbl" class='table table-condensed'>
-        <thead>
-            <tr>
-                <th><p class='span1'>Ancient</p></th>
-                <th><p class='span2'>Current</p></th>
-                <th><p class='span2'>Target</p></th>
-            </tr>
-        </thead>
-        <tbody id="ancient_table_body">
-            <tr>
-                <td><span class='span1'>Hero Souls</span></td>
-                <td>
-                    <span class='span2' id="soulsin">0</pan>
-                </td>
-                <td>
-                    <span class='span2' id="soulsout">0</span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</script>
 <script id="chat_template" type="text/template" class="template">
     <iframe frameborder="0"
         scrolling="no"
@@ -209,13 +201,10 @@
         width="100%">
     </iframe>
 </script>
-
-<!-- Requires jquery -->
-<!-- Load init scripts last -->
-<script language="javascript" src="static/js/init_a.js"></script>
-<script language="javascript" src="static/js/shared.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js"></script>
-<script language="javascript" src='static/js/calcs_a.js'></script>
-<link rel="stylesheet" type="text/css" href="static/css/calc_a_styles.css">
-
+<!-- app-specific -->
+    <link rel="stylesheet" type="text/css" href="static/css/calc_a_styles.css">
+    <script language="javascript" src="static/js/shared.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js"></script>
+    <script language="javascript" src='static/js/calcs_a.js'></script>
+    <script src="static/js/angular.js"></script>
 </html>
