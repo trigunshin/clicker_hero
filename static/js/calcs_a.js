@@ -1,65 +1,6 @@
 var loadSpinner = new Spinner({});
 
 var AbaddonMultiplier = null;
-
-var Achievements = {
-  "13": 1, // hoard
-  "14": 2, // hoard
-  "15": 3, // hoard
-   "1": 1, // zone
-   "2": 2, // zone
-   "3": 3, // zone
-  "61": 0, // omeet
-  "33": 1, // dps
-  "34": 2, // dps
-  "35": 3, // dps
-  "37": 0, // click 12
-  "38": 0, // click 14
-  "39": 3, // click
-  "41": 3, // crit
-  "43": 0, // ascend 1
-  "44": 0, // ascend 3
-  "45": 0, // ascend 5
-  "46": 0, // ascend 10
-  "59": 0, // ascend 25
-  "91": 0, // ascend 50
-  "92": 0, // ascend 100
-  "93": 0, // ascend 250
-  "21": 1, // boss
-  "22": 2, // boss
-  "23": 3, // boss
-   "5": 1, // click
-   "6": 2, // click
-   "7": 3, // click
-   "9": 1, // gold
-  "10": 2, // gold
-  "11": 3, // gold
-  "29": 1, // level
-  "30": 2, // level
-  "31": 3, // level
-  "17": 1, // kill
-  "18": 2, // kill
-  "19": 3, // kill
-  "25": 1, // upgrade
-  "26": 2, // upgrade
-  "27": 3, // upgrade
-};
-var Upgrades = {
-  "12": 25,
-  "25": 20,
-  "26": 20,
-  "27": 20,
-  "28": 20,
-  "36": 25,
-  "57": 25,
-  "82": 20,
-  "83": 20,
-  "87": 10,
-  "97": 10,
-  "120": 25,
-  "122": 25,
-  "126": 25,
-};
 var AncientMin = 3;
 var AncientMax = 31;
 
@@ -237,6 +178,9 @@ function Import() {
     if (data.upgrades[k] && Upgrades.hasOwnProperty(k)) {
       mult *= 1 + 0.01 * Upgrades[k];
     }
+  }
+  if(data.paidForRubyMultiplier) {
+    mult *= 2;
   }
   for (var k in Upgrades) {
     AchievementMultiplier *= (1 + 0.01 * Upgrades[k]);

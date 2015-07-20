@@ -1,3 +1,7 @@
 table .hilite {
 	background-color: #dff0d8 !important;
 }
+
+tbody #thumb_ancient_table_body {
+	padding: 0px 0px 0px 0px;
+}
