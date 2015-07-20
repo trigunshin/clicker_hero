@@ -221,10 +221,6 @@ var ToPurchase = [1,2,4,8,16,35,70,125,250,500,800,1200,1700,2200,2750,3400,4100
 var Seed = null;
 var OwnedNotInList = 1;
 
-function decode_save() {
-
-}
-
 const ANTI_CHEAT_CODE = "Fe12NAfA3R6z4k0z";
 const SALT = "af0ik392jrmt0nsfdghy0";
 function Import() {
