@@ -173,17 +173,6 @@ clickerCalcs.controller('ClickerCalcCtrl', function($scope) {
 //    app setup   //
 ////////////////////
 _.templateSettings.variable = "rc";
-// game render
-var game_template = _.template(
-    $("script#game_area_template").html()
-);
-var game_template_data = {
-    height: 640,
-    width: 1136,
-    ch_version: 3670
-};
-$('#game_template_anchor').append(game_template(game_template_data));
-
 // set up on-click for game reload button
 $('#reload_flash').click(function() {
      var clone = $('#flashContent object').clone();
