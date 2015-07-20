@@ -179,6 +179,9 @@ function Import() {
       mult *= 1 + 0.01 * Upgrades[k];
     }
   }
+  if(data.paidForRubyMultiplier) {
+    mult *= 2;
+  }
   for (var k in Upgrades) {
     AchievementMultiplier *= (1 + 0.01 * Upgrades[k]);
   }
