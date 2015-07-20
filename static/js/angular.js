@@ -68,8 +68,7 @@ clickerCalcs.controller('ClickerCalcCtrl', function($scope) {
     // model
     $scope.ancient_data_by_id = _.reduce(_.values(Ancients), function(ancients_by_id, ancient) {
         ancients_by_id[ancient.id] = ancient;
-        ancients_by_id[ancient.id].current = 0;
-        ancients_by_id[ancient.id].target = 0;
+        ancients_by_id[ancient.id].thumb = {current: 0, target: 0};
         return ancients_by_id;
     }, {});
 
@@ -148,12 +147,12 @@ clickerCalcs.controller('ClickerCalcCtrl', function($scope) {
             // update the current 'current' value
             var cur_ancient = _.get($scope.ancient_data_by_id, ancient.id, false);
             if(cur_ancient === false) return;
-            cur_ancient.current = ancient.level;
+            cur_ancient.thumb.current = ancient.level;
 
             // if we have a fn for the ancient, calc the new target
             var calc_function = _.get(funcs, cur_ancient.id, false);
             if(calc_function === false) return;
-            cur_ancient.target = calc_function(
+            cur_ancient.thumb.target = calc_function(
                 $scope.known_ancients, imported_ancient_data);
         });
 

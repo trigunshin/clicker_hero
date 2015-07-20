@@ -10,13 +10,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.js"></script>
     
     <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
-    
-    <!-- app-specific -->
-    <script language="javascript" src="static/js/shared.js"></script>
-    <script src="static/js/angular.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js"></script>
-    <script language="javascript" src='static/js/calcs_a.js'></script>
 </head>
 <body ng-controller="ClickerCalcCtrl">
     <div id="container-fluid">
@@ -42,11 +35,19 @@
                     </table>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="heroes">
-                    <div id="hero_template_anchor"></div>
+                    <div role="tabpanel" class="tab-pane" id="heroes">
+                      <div class="panel-heading">
+                        Efficiency indicates switching all gilds to the indicated hero, and includes the 80 souls lost for each regild.<br />
+                        Tinkering with gilds will not automatically account for the souls lost to regilding.
+                      </div>
+                      <table id="heroestbl" class="table table-condensed">
+                        <tr><th><input type="checkbox" onclick="$('.chkHero').prop('checked', this.checked);" title="Select all heroes" />Hero</th><th>Gilds</th><th>Efficiency</th></tr>
+                      </table>
+                    </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="jayeeyeechat"></div>
                 <div role="tabpanel" class="tab-pane active" id="ancients_thumb">
-                    <table id="ancienttbl" class='table table-condensed'>
+                    <table id="thumb_ancient_tbl" class='table table-condensed'>
                         <thead>
                             <tr>
                                 <th><span>Ancient</span></th>
@@ -56,10 +57,10 @@
                         </thead>
                         <tbody id="ancient_table_body">
                             <tr ng-repeat="name in known_ancients_names|orderBy" 
-                            ng-class="ancient_data_by_id[known_ancients[name].id].current < ancient_data_by_id[known_ancients[name].id].target ? 'success' : ''">
+                            ng-class="ancient_data_by_id[known_ancients[name].id].thumb.current < ancient_data_by_id[known_ancients[name].id].thumb.target ? 'success' : ''">
                                 <td><span>{{ ancient_data_by_id[known_ancients[name].id].name }}</span></td>
-                                <td><span>{{ ancient_data_by_id[known_ancients[name].id].current }}</pan></td>
-                                <td><span>{{ ancient_data_by_id[known_ancients[name].id].target }}</span></td>
+                                <td><span>{{ ancient_data_by_id[known_ancients[name].id].thumb.current }}</pan></td>
+                                <td><span>{{ ancient_data_by_id[known_ancients[name].id].thumb.target }}</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -69,10 +70,10 @@
             <!-- calculator config area -->
             <div id='calc_config_template_section' class='col-md-5'>
                 <ul class='nav nav-tabs'>
-                    <li role="presentation" class="active"><a href="#ancients_thumb" aria-controls="ancients_thumb" role="tab" data-toggle="tab">Thumb</a></li>
+                    <li role="presentation" class="active"><a href="#ancients_thumb" aria-controls="ancients_thumb" role="tab" data-toggle="tab">Thumb Ancients</a></li>
                     <li role="presentation"><a href="#jayeeyeechat" aria-controls="jayeeyeechat" role="tab" data-toggle="tab">Jayeeyee Chat</a></li>
-                    <li role="presentation" class=""><a href="#ancients" aria-controls="ancients" role="tab" data-toggle="tab">Ancients (Broken)</a></li>
-                    <li role="presentation"><a href="#heroes" aria-controls="heroes" role="tab" data-toggle="tab">Heroes (Broken)</a></li>
+                    <li role="presentation" class=""><a href="#ancients" aria-controls="ancients" role="tab" data-toggle="tab">.17 Ancients Calc</a></li>
+                    <li role="presentation"><a href="#heroes" aria-controls="heroes" role="tab" data-toggle="tab">Hero Gilds</a></li>
                 </ul>
                 <div id='calc_config_anchor'>
                     <div>
@@ -191,40 +192,6 @@
         </td>
     </tr>
 </script>
-<script id="hero_area_template" type="text/template" class="template">
-<div role="tabpanel" class="tab-pane" id="heroes">
-  <div class="panel-heading">
-    Efficiency indicates switching all gilds to the indicated hero, and includes the 80 souls lost for each regild.<br />
-    Tinkering with gilds will not automatically account for the souls lost to regilding.
-  </div>
-  <table id="heroestbl" class="table table-condensed">
-    <tr><th><input type="checkbox" onclick="$('.chkHero').prop('checked', this.checked);" title="Select all heroes" />Hero</th><th>Gilds</th><th>Efficiency</th></tr>
-  </table>
-</div>
-</script>
-<script id="calc_area_template" type="text/template" class="template">
-    <div>Thanks to <a href="https://www.reddit.com/user/rler">rler</a> for the calculations.</div>
-    <table id="ancienttbl" class='table table-condensed'>
-        <thead>
-            <tr>
-                <th><p class='span1'>Ancient</p></th>
-                <th><p class='span2'>Current</p></th>
-                <th><p class='span2'>Target</p></th>
-            </tr>
-        </thead>
-        <tbody id="ancient_table_body">
-            <tr>
-                <td><span class='span1'>Hero Souls</span></td>
-                <td>
-                    <span class='span2' id="soulsin">0</pan>
-                </td>
-                <td>
-                    <span class='span2' id="soulsout">0</span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</script>
 <script id="chat_template" type="text/template" class="template">
     <iframe frameborder="0"
         scrolling="no"
@@ -234,32 +201,10 @@
         width="100%">
     </iframe>
 </script>
-<script id="thumb_template" type="text/template" class="template">
-    <table id="thumb_ancienttbl" class='table table-condensed'>
-        <thead>
-            <tr>
-                <th><p class='span3'>Ancient</p></th>
-                <th><p class='span1'>Current</p></th>
-                <th><p class='span1'>Target</p></th>
-            </tr>
-        </thead>
-        <tbody id="thumb_ancient_table_body">
-            <% _.each(rc.names, function(ancient_name) { %>
-            <tr>
-                <td>
-                    <span class='span3' title='<%= rc.ancients[ancient_name].desc %>'>
-                        <%= rc.ancients[ancient_name].name %>
-                    </span>
-                </td>
-                <td>
-                    <span class='span1' id="start_level">0</span>
-                </td>
-                <td>
-                    <span class='span1' id="end_level">0</span>
-                </td>
-            </tr>
-            <% }); %>
-        </tbody>
-    </table>
-</script>
+<!-- app-specific -->
+    <link rel="stylesheet" type="text/css" href="static/css/calc_a_styles.css">
+    <script language="javascript" src="static/js/shared.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js"></script>
+    <script language="javascript" src='static/js/calcs_a.js'></script>
+    <script src="static/js/angular.js"></script>
 </html>
