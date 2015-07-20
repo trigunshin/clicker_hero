@@ -19,7 +19,7 @@
     <div id="container-fluid">
         <div id="clicker_container" class="row">
             <div class="tab-content col-md-4">
-                <div role="tabpanel" class="tab-pane active" id="ancients">
+                <div role="tabpanel" class="tab-pane" id="ancients">
                     <div>Thanks to <a href="https://www.reddit.com/user/rler">rler</a> for the calculations.</div>
                     <table id="ancienttbl" class='table table-condensed'>
                         <thead>
@@ -35,7 +35,7 @@
                                 <td><span id="soulsin">0</pan></td>
                                 <td><span id="soulsout">0</span></td>
                             </tr>
-                            <tr ng-repeat="ancient in ancients|orderBy:ancient.name">
+                            <tr ng-repeat="ancient in known_ancients">
                                 <td><span>{{ ancient.name }}</span></td>
                                 <td><span>{{ ancient.level }}</pan></td>
                                 <td><span>{{ ancient.end }}</span></td>
@@ -47,12 +47,32 @@
                     <div id="hero_template_anchor"></div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="jayeeyeechat"></div>
+                <div role="tabpanel" class="tab-pane active" id="ancients_thumb">
+                    <table id="ancienttbl" class='table table-condensed'>
+                        <thead>
+                            <tr>
+                                <th><span>Ancient</span></th>
+                                <th><span>Current</span></th>
+                                <th><span>Target</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="ancient_table_body">
+                            <tr ng-repeat="name in known_ancients_names|orderBy" 
+                            ng-class="ancient_data_by_id[known_ancients[name].id].current < ancient_data_by_id[known_ancients[name].id].target ? 'success' : ''">
+                                <td><span>{{ ancient_data_by_id[known_ancients[name].id].name }}</span></td>
+                                <td><span>{{ ancient_data_by_id[known_ancients[name].id].current }}</pan></td>
+                                <td><span>{{ ancient_data_by_id[known_ancients[name].id].target }}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- calculator config area -->
             <div id='calc_config_template_section' class='col-md-5'>
                 <ul class='nav nav-tabs'>
-                    <li role="presentation" class="active"><a href="#ancients" aria-controls="ancients" role="tab" data-toggle="tab">Ancients</a></li>
+                    <li role="presentation" class="active"><a href="#ancients_thumb" aria-controls="ancients_thumb" role="tab" data-toggle="tab">Thumb</a></li>
+                    <li role="presentation" class=""><a href="#ancients" aria-controls="ancients" role="tab" data-toggle="tab">Ancients</a></li>
                     <li role="presentation"><a href="#heroes" aria-controls="heroes" role="tab" data-toggle="tab">Heroes</a></li>
                     <li role="presentation"><a href="#jayeeyeechat" aria-controls="jayeeyeechat" role="tab" data-toggle="tab">Jayeeyee Chat</a></li>
                 </ul>
