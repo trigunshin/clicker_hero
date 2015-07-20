@@ -177,54 +177,6 @@
     </div>
 </body>
 <!-- templates -->
-<script id="calc_config_template" type="text/template" class="template">
-    <div>
-        <input id="savedata" class='span1' onfocus="this.select()" onmouseup="return false" type='text' ng-model="save_data"></input>
-        <input type="button" class='span2' value="Import" ng-click="import()"></input>
-        <br>
-        <div>
-            <button id="reload_flash" class="btn btn-large btn-inverse">Reload Game</button>
-            <button class='btn btn-large' onclick="StartCompute()">Rerun Calcs</button>
-            <button id='flash_visibility_toggle' class='btn btn-large' >Toggle Visibility</button>
-        </div>
-    </div>
-    <div class='row'>
-        <div class='span1'>
-            <label><input type="checkbox" id="idlemode" checked="checked"></input>Idle mode</label>
-            <div id="nonidle" style="display: none">
-                <table border="0">
-                    <tr><th>Cooldown usage:</th><th>Uses/30 min</th><th>Clicks/sec</th></tr>
-                    <tr>
-                        <td>Full (1+2+3+4+5+7):</td>
-                       <td><input type="text" id="cdfullnum" value="2"></input></td>
-                       <td><input type="text" id="cdfullcps" value="40"></input></td>
-                    </tr>
-                    <tr>
-                        <td>Half (1+2+3+4):</td>
-                        <td><input type="text" id="cdhalfnum" value="1"></input></td>
-                        <td><input type="text" id="cdhalfcps" value="40"></input></td>
-                    </tr>
-                    <tr>
-                        <td>Short (1+2):</td>
-                        <td><input type="text" id="cdshortnum" value="4"></input></td>
-                        <td><input type="text" id="cdshortcps" value="40"></input></td>
-                    </tr>
-                    <tr>
-                        <td>None:</td>
-                        <td></td>
-                        <td><input type="text" id="cdnonecps" value="40"></input></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class='span1'>
-            <label><input type="checkbox" id="suggestbuy" checked="checked"></input>Suggest ancients</label>
-        </div>
-        <div class='span2'>
-            <label><input type="checkbox" id="addsouls" checked="checked"></input>Include souls gained after ascension</label>
-        </div>
-    </div>
-</script>
 <script id="ancient_row_template" type="text/template" class="template">
     <tr id='<%- rc.name %>_data_row'>
         <td>
