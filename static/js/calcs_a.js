@@ -180,7 +180,7 @@ function Import() {
     }
   }
   if(data.paidForRubyMultiplier) {
-    mult *= 2;
+    AchievementMultiplier *= 2;
   }
   for (var k in Upgrades) {
     AchievementMultiplier *= (1 + 0.01 * Upgrades[k]);
