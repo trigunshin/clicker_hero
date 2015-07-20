@@ -102,7 +102,7 @@ function UpdateAncientPrices(levels, didGetVaagur) {
     }
   }
 }
-
+var items = {};
 var ancientList = [];
 for (var k in Ancients) {
   if (Ancients.hasOwnProperty(k)) {
@@ -153,6 +153,7 @@ function Import() {
   }
   var data = $.parseJSON(atob(txt));
 
+  items = data.items.items;
   var heroes = data.heroCollection.heroes;
   var ascSouls = 0;
   for (var k in heroes) {
@@ -393,7 +394,8 @@ function ShowNewAncients(levels, souls, activity, used) {
     var newLevels = $.extend({}, levels);
     newLevels[k] = 1;
     computeThread.postMessage({cmd: "Compute", levels: newLevels, souls: souls - Ancients[k].price,
-      gilded: GetGildedHeroes(), activity: activity, damageFactor: AchievementMultiplier, ancient: k, used: used});
+      gilded: GetGildedHeroes(), activity: activity, damageFactor: AchievementMultiplier, ancient: k, used: used,
+      items: items});
   }
   $(".buybtn").click(function() {
     var aid = $(this).attr("aid");
@@ -423,7 +425,8 @@ function ShowRegilds(levels, souls, activity, used) {
       $("#hero" + i.toString() + " .heroEff").html("<img src=\"//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif\"/>")
       
       computeThread.postMessage({cmd: "Compute", levels: levels, souls: souls - (totalGilds - gilds[i]) * 80,
-        gilded: newGilds, activity: activity, damageFactor: AchievementMultiplier, hero: i, used: used});
+        gilded: newGilds, activity: activity, damageFactor: AchievementMultiplier, hero: i, used: used,
+        items: items});
     } else {
       $("#hero" + i.toString() + " .heroEff").html('N/A');
     }
@@ -479,7 +482,7 @@ function StartCompute() {
   $("#output").empty();
 
   computeThread.postMessage({cmd: "Compute", levels: levels, souls: souls, gilded: GetGildedHeroes(), activity: activity,
-    damageFactor: AchievementMultiplier, used: used});
+    damageFactor: AchievementMultiplier, used: used, items:items});
   
   ShowNewAncients(levels, souls, activity, used);
   ShowRegilds(levels, souls, activity, used);

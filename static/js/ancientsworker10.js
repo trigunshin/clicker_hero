@@ -1,4 +1,5 @@
 importScripts('shared.js');
+importScripts('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.js');
 
 for (var i = 0; i < Heroes.length; i++) {
   Heroes[i].gilded = Heroes[i].gilded ? Heroes[i].gilded : 0;
@@ -34,6 +35,14 @@ function Compute(e) {
   damageFactor = e.data.damageFactor,
   retAncient = e.data.ancient,
   retHero = e.data.hero;
+  relics = e.data.items;
+
+  var relic_primal_bonus = .01 * _.reduce(_.values(relics), function(accum, item) {
+    if(item.bonusType1 == 17) return accum+= item.bonus1Level;
+    if(item.bonusType2 == 17) return accum+= item.bonus2Level;
+    if(item.bonusType3 == 17) return accum+= item.bonus3Level;
+    if(item.bonusType4 == 17) return accum+= item.bonus4Level;
+  }, 0);
 
   for (var i = 0; i < gilded.length; i++) {
     Heroes[i].gilded = gilded[i];
@@ -162,7 +171,7 @@ function Compute(e) {
     } else if (level > 100) {
       var souls = Math.floor(Math.pow(((level - 100) / 5 + 4) / 5, 1.3) * solomon);
       if (level % 100) {
-        souls *= 0.25 + 0.01 * levels.atman;
+        souls *= 0.25 + 0.01 * levels.atman + relic_primal_bonus;
       }
       return souls;
     }
