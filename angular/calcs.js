@@ -63,6 +63,7 @@ function calc_iris(ancients, player_ancients) {
 clickerCalcs.controller('ClickerCalcCtrl', function($scope) {
     $scope.known_ancients = Ancients;
     $scope.known_ancients_names = _.keys(Ancients);
+    $scope.idle_mode = true;
 
     // model
     $scope.ancient_data_by_id = _.reduce(_.values(Ancients), function(ancients_by_id, ancient) {
@@ -83,11 +84,21 @@ clickerCalcs.controller('ClickerCalcCtrl', function($scope) {
         28: calc_base,
         16: calc_morgulis,
         4: calc_gold,
+        8: calc_gold,
         9: calc_gold,
-        10: calc_gold,
         15: calc_clicks,
         19: calc_clicks,
         29: calc_jugg,
+        3: calc_solomon,
+        30: calc_iris
+    };
+    $scope.thumb_funcs_idle = {
+        5: calc_base,
+        28: calc_base,
+        16: calc_morgulis,
+        4: calc_gold,
+        8: calc_gold,
+        9: calc_gold,
         3: calc_solomon,
         30: calc_iris
     };
@@ -128,6 +139,9 @@ clickerCalcs.controller('ClickerCalcCtrl', function($scope) {
     $scope.post_import = function() {
         // get the new data per-ancient
         var imported_ancient_data = $scope.data.ancients.ancients;
+        // respect idle mode
+        var funcs = $scope.idle_mode ? $scope.thumb_funcs_idle: $scope.thumb_funcs;
+
         _.each(imported_ancient_data, function(ancient, ancient_id) {
             // update the current 'current' value
             var cur_ancient = _.get($scope.ancient_data_by_id, ancient.id, false);
@@ -135,7 +149,7 @@ clickerCalcs.controller('ClickerCalcCtrl', function($scope) {
             cur_ancient.current = ancient.level;
 
             // if we have a fn for the ancient, calc the new target
-            var calc_function = _.get($scope.thumb_funcs, cur_ancient.id, false);
+            var calc_function = _.get(funcs, cur_ancient.id, false);
             if(calc_function === false) return;
             cur_ancient.target = calc_function(
                 $scope.known_ancients, imported_ancient_data);
@@ -164,6 +178,14 @@ clickerCalcs.controller('ClickerCalcCtrl', function($scope) {
         AbaddonMultiplier = data.allDpsMultiplier / mult;
     }
 
+    $scope.idle_change = function() {
+        if($scope.idle_mode) {
+            $("#nonidle").slideUp();
+        } else {
+            $("#nonidle").slideDown();
+        }
+    };
+
     // load chat tab
     var chat_template = _.template($("script#chat_template").html());
     $('#jayeeyeechat').append(chat_template());
@@ -178,14 +200,6 @@ $('#reload_flash').click(function() {
      var clone = $('#flashContent object').clone();
       $('#flashContent object').remove();
      $('#flashContent').append(clone);
-});
-
-$("#idlemode").change(function() {
-  if (this.checked) {
-    $("#nonidle").slideUp();
-  } else {
-    $("#nonidle").slideDown();
-  }
 });
 
 // tryhard functioning
