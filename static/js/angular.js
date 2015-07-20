@@ -156,29 +156,10 @@ clickerCalcs.controller('ClickerCalcCtrl', function($scope) {
             cur_ancient.target = calc_function(
                 $scope.known_ancients, imported_ancient_data);
         });
+
+        // trigger old rler calculations
+        Import();
     };
-    $scope.multipliers = function(save_data) {
-        var mult = 1;
-        for (var k in data.achievements) {
-           if (data.achievements[k]) {
-                if (Achievements.hasOwnProperty(k)) {
-                    mult *= 1 + 0.01 * Achievements[k];
-                } else {
-                    mult *= 1.05;
-                }
-            }
-        }
-        AchievementMultiplier = mult;
-        for (var k in data.upgrades) {
-            if (data.upgrades[k] && Upgrades.hasOwnProperty(k)) {
-                mult *= 1 + 0.01 * Upgrades[k];
-            }
-        }
-        for (var k in Upgrades) {
-            AchievementMultiplier *= (1 + 0.01 * Upgrades[k]);
-        }
-        AbaddonMultiplier = data.allDpsMultiplier / mult;
-    }
 
     $scope.idle_change = function() {
         if($scope.idle_mode) {
