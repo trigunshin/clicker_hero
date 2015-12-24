@@ -1,0 +1,45 @@
+cost legend
+1K  =   1,000   =   One Thousand
+1M  =   1,000K  =   One Million
+1B  =   1,000M  =   One Billion
+1T  =   1,000B  =   One Trillion
+1q  =   1,000T  =   One Quadrillion
+1Q  =   1,000q  =   One Quintillion
+1s  =   1,000Q  =   One Sextillion
+1S  =   1,000s  =   One Septillion
+1O  =   1,000S  =   One Octillion
+1N  =   1,000O  =   One Nonillion
+1d  =   1,000N  =   One Decillion
+1U  =   1,000d  =   One Undecillion
+1D  =   1,000U  =   One Duodecillion
+1!  =   1,000D  =   One Tredecillion
+1@  =   1,000!  =   One Quattuordecillion
+1#  =   1,000@  =   One Quindecillion
+1$  =   1,000#  =   One Sexdecillion
+1%  =   1,000$  =   One Septendecillion
+1^  =   1,000%  =   One Octodecillion
+1&  =   1,000^  =   One Novemdecillion
+1*  =   1,000&  =   One Vigintillion
+A lot   >   1,000*  <   A lot
+
+K 3
+M 6
+B 9
+T 12
+q 15
+Q 18
+s 21
+S 24
+O 27
+N 30
+d 33
+U 36
+D 39
+! 42
+@ 45
+# 48
+$ 51
+% 54
+^ 57
+& 60
+*/e
